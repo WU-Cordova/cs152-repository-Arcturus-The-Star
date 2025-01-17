@@ -30,16 +30,16 @@ class IBag(ABC, Generic[T]):
             TypeError: If the item is None.
 
         Examples:
-            # >>> bag: Bag[int] = Bag()
-            # >>> bag.add(1)
-            # >>> bag.add(2)
-            # >>> bag.add(1)
-            #
-            # >>> bag.count(1)
+            >>> bag: Bag[int] = Bag()
+            >>> bag.add(1)
+            >>> bag.add(2)
+            >>> bag.add(1)
+
+            >>> bag.count(1)
             2
-            # >>> bag.count(2)
+            >>> bag.count(2)
             1
-            # >>> bag.add(None)
+            >>> bag.add(None)
             TypeError: Item cannot be None
         """
         pass
@@ -59,18 +59,18 @@ class IBag(ABC, Generic[T]):
             ValueError: If the item is not present in the Bag.
 
         Examples:
-            # >>> bag: Bag[int] = Bag()
-            # >>> bag.add(1)
-            # >>> bag.add(2)
-            # >>> bag.add(1)
+            >>> bag: Bag[int] = Bag()
+            >>> bag.add(1)
+            >>> bag.add(2)
+            >>> bag.add(1)
 
-            # >>> bag.remove(1)
-            # >>> bag.count(1)
+            >>> bag.remove(1)
+            >>> bag.count(1)
             1
-            # >>> bag.remove(1)
-            # >>> bag.count(1)
+            >>> bag.remove(1)
+            >>> bag.count(1)
             0
-            # >>> bag.remove(1)
+            >>> bag.remove(1)
             ValueError: Item not found in Bag
         """
         pass
@@ -87,16 +87,16 @@ class IBag(ABC, Generic[T]):
             int: The number of occurrences of the item.
 
         Examples:
-            # >>> bag: Bag[int] = Bag()
-            # >>> bag.add(1)
-            # >>> bag.add(2)
-            # >>> bag.add(1)
+            >>> bag: Bag[int] = Bag()
+            >>> bag.add(1)
+            >>> bag.add(2)
+            >>> bag.add(1)
 
-            # >>> bag.count(1)
+            >>> bag.count(1)
             2
-            # >>> bag.count(2)
+            >>> bag.count(2)
             1
-            # >>> bag.count(3)
+            >>> bag.count(3)
             0
         """
         pass
@@ -110,12 +110,12 @@ class IBag(ABC, Generic[T]):
             int: The total number of items in the Bag.
 
         Examples:
-            # >>> bag: Bag[int] = Bag()
-            # >>> bag.add(1)
-            # >>> bag.add(2)
-            # >>> bag.add(1)
+            >>> bag: Bag[int] = Bag()
+            >>> bag.add(1)
+            >>> bag.add(2)
+            >>> bag.add(1)
 
-            # >>> bag.size()
+            >>> bag.size()
             3
         """
         pass
@@ -134,7 +134,7 @@ class IBag(ABC, Generic[T]):
     def __contains__(self, item: T) -> bool:
         """
         Checks if the Bag contains the specified item.
-        
+
         Args:
             item (T): The item to check for.
 
@@ -142,16 +142,16 @@ class IBag(ABC, Generic[T]):
             bool: True if the item is present in the Bag, False otherwise.
 
         Examples:
-            # >>> bag: Bag[int] = Bag()
-            # >>> bag.add(1)
-            # >>> bag.add(2)
-            # >>> bag.add(1)
+            >>> bag: Bag[int] = Bag()
+            >>> bag.add(1)
+            >>> bag.add(2)
+            >>> bag.add(1)
 
-            # >>> bag.contains(1)
+            >>> bag.contains(1)
             True
-            # >>> bag.contains(2)
+            >>> bag.contains(2)
             True
-            # >>> bag.contains(3)
+            >>> bag.contains(3)
             False
         """
         pass
