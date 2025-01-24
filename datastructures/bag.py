@@ -45,7 +45,7 @@ class Bag(IBag[T]):
         else:
             self.__bag[item] -= 1
             if self.__bag[item] == 0:
-                self.__bag[item].remove()
+                del self.__bag[item]
 
     def count(self, item: T) -> int:
         """
