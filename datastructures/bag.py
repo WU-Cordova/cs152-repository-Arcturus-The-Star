@@ -4,16 +4,51 @@ from datastructures.ibag import IBag, T
 
 class Bag(IBag[T]):
     def __init__(self, *items: Optional[Iterable[T]]) -> None:
-        raise NotImplementedError("__init__ method not implemented")
+        """
+        Initialises the bag data structure and iterates over items and adds them, if present
+        Arguments:
+            items: The items to be added, optional
+        Returns:
+            None
+        """
+        self.__bag = {}
+        if items:
+            for i in items:
+                self.add(i)
 
     def add(self, item: T) -> None:
-        raise NotImplementedError("add method not implemented")
+        """
+        Adds one item to the bag, updating count if already present
+        Arguments:
+            item: Item to be added
+        Returns:
+            None
+        """
+        if item is None:
+            raise TypeError
+        else:
+            if item not in self.__bag:
+                self.__bag[item] = 1
+            else:
+                self.__bag[item] += 1
 
     def remove(self, item: T) -> None:
         raise NotImplementedError("remove method not implemented")
 
     def count(self, item: T) -> int:
-        raise NotImplementedError("count method not implemented")
+        """
+        Returns the count of a specific item if present, zero otherwise
+        Arguments:
+
+        Returns:
+            int: number of occurrences in the item
+        """
+
+        try:
+            count = self.__bag[item]
+            return count
+        except KeyError:
+            return 0
 
     def __len__(self) -> int:
         raise NotImplementedError("__len__ method not implemented")
