@@ -7,6 +7,7 @@ class Bag(IBag[T]):
         """
         Initialises the bag data structure and iterates over items and adds them, if present
         Arguments:
+            self
             items: The items to be added, optional
         Returns:
             None
@@ -20,6 +21,7 @@ class Bag(IBag[T]):
         """
         Adds one item to the bag, updating count if already present
         Arguments:
+            self
             item: Item to be added
         Returns:
             None
@@ -36,6 +38,7 @@ class Bag(IBag[T]):
         """
         Decreases an item's count, removing when it releases zero. Raises ValueError if item is not present
         Parameters:
+            self
             item: the item to be removed
         Returns:
             None
@@ -51,11 +54,10 @@ class Bag(IBag[T]):
         """
         Returns the count of a specific item if present, zero otherwise
         Arguments:
-
+            self
         Returns:
-            int: number of occurrences in the item
+            count: number of occurrences in the item
         """
-
         try:
             count = self.__bag[item]
             return count
@@ -63,13 +65,46 @@ class Bag(IBag[T]):
             return 0
 
     def __len__(self) -> int:
-        raise NotImplementedError("__len__ method not implemented")
+        """
+        Returns the total number of occurrences of all items
+        Parameters:
+            self
+        Returns:
+            count: The total number of occurrences of all items
+        """
+        count = 0
+        for i in self.__bag:
+            count += self.__bag[i]
+        return count
 
-    def distinct_items(self) -> int:
-        raise NotImplementedError("distinct_items method not implemented")
+    def distinct_items(self) -> Iterable[T]:
+        """
+        Returns a list of all unique items in the bag
+        Parameters:
+            self
+        Returns:
+            Iterable[T]: a list of the unique items in the bag
+        """
+        return list(self.__bag.keys())
 
     def __contains__(self, item) -> bool:
-        raise NotImplementedError("__contains__ method not implemented")
+        """
+        Magic method tied to the "in" command
+        Parameters:
+            self
+            item: the item to be checked
+        Returns:
+            bool: True if the item is in the bag, false otherwise
+        """
+        return item in self.__bag
 
     def clear(self) -> None:
-        raise NotImplementedError("clear method not implemented")
+        """
+        Clears the bag of all data
+        Parameters:
+            self
+        Returns:
+            None
+        """
+        for i in self.distinct_items():
+            self.remove(i)
