@@ -33,6 +33,13 @@ class Bag(IBag[T]):
                 self.__bag[item] += 1
 
     def remove(self, item: T) -> None:
+        """
+        Decreases an item's count, removing when it releases zero. Raises ValueError if item is not present
+        Parameters:
+            item: the item to be removed
+        Returns:
+            None
+        """
         if item not in self.__bag:
             raise ValueError
         else:
