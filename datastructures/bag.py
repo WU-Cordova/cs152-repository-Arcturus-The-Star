@@ -55,6 +55,7 @@ class Bag(IBag[T]):
         Returns the count of a specific item if present, zero otherwise
         Arguments:
             self
+            item: the item to be searched for
         Returns:
             count: number of occurrences in the item
         """
