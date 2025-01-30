@@ -1,4 +1,5 @@
 from datastructures.bag import Bag
+import random
 
 class Card:
     def __init__(self, suit, name):
@@ -7,7 +8,7 @@ class Card:
         self.__name = name
 
     def __str__(self):
-        return f"{self.__suit} {self.__name}"
+        return f"{self.__name}{self.__suit}"
 
     @property
     def suit(self) -> str:
@@ -17,13 +18,15 @@ class Card:
     def value(self) -> int:
         return self.__value
 
-    @value.setter
-    def value(self, value):
-        self.__value = value
-
     @property
     def name(self):
         return self.__name
+
+    def flip_ace(self):
+        if self.__name == "A":
+            self.__value = 11 if self.__value == 1 else 1
+        else:
+            raise ValueError("Selected card is not Ace")
 
 class MultiDeck:
     def __init__(self, num):
@@ -40,6 +43,17 @@ class MultiDeck:
             for value in ["A", "J", "Q", "K"] + list(range(1,11)):
                 self.__deck.add(Card(suit, value))
 
+    def draw(self):
+        if len(self.__deck) > 0:
+            card = random.choice(self.__deck.distinct_items())
+            self.__deck.remove(card)
+            return card
+        else:
+            raise IndexError("Deck is empty")
+
     @property
     def deck(self):
         return self.__deck
+
+if __name__ == "__main__":
+    pass
