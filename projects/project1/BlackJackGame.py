@@ -1,5 +1,5 @@
-from Card import MultiDeck, Card
-import random, time
+from Card import MultiDeck
+import random, time, winsound
 
 class Player:
     """
@@ -64,7 +64,6 @@ class BlackJackGame:
     """
     The main logic for a game of blackjack
     """
-
     def __init__(self):
         self.__deck = None
         self.__player = None
@@ -74,6 +73,7 @@ class BlackJackGame:
         """
         The game logic.
         """
+        winsound.PlaySound("Clair_De_Lune", winsound.SND_ASYNC | winsound.SND_ALIAS | winsound.SND_LOOP)
         for i in [".------..------..------..------..------..------..------..------..------.\n",
               "|B.--. ||L.--. ||A.--. ||C.--. ||K.--. ||J.--. ||A.--. ||C.--. ||K.--. |\n",
               "| :(): || :/\\: || (\\/) || :/\\: || :/\\: || :(): || (\\/) || :/\\: || :/\\: |\n",
@@ -161,6 +161,8 @@ class BlackJackGame:
                     loop = False
                 case _:
                     print("Input not recognized. Press Y to play again or N to quit")
+
+        winsound.PlaySound(None, winsound.SND_ASYNC)
 
 
 if __name__ == "__main__":

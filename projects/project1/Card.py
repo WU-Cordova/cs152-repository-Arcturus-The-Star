@@ -1,5 +1,5 @@
-from datastructures.bag import Bag
 import random
+from datastructures.bag import Bag
 
 class Card:
     """
