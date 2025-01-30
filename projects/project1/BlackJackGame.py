@@ -1,5 +1,17 @@
 from Card import MultiDeck
-import random, time, winsound
+import random, time
+
+try: # Hopefully a compatibility filter for other operating systems
+    import winsound
+except ImportError:
+    class winsound:
+        @staticmethod
+        def Beep(frequency, duration):
+            pass
+
+        @staticmethod
+        def PlaySound(sound, flags):
+            pass
 
 class Player:
     """
