@@ -20,7 +20,7 @@ class Card:
     def flip_ace(self) -> None:
         """
         Flips an ace from 1 to 11 or 11 to 1.
-        :return: None
+        :return:
         """
         if self.__name == "A":
             self.__value = 11 if self.__value == 1 else 1
@@ -56,7 +56,7 @@ class MultiDeck:
         """
         Creates and stores a MultiDeck.
         :param num: The number of standard decks the MultiDeck consists of.
-        :return: None
+        :return:
         """
         for suit in [chr(9825), chr(9826), chr(9827), chr(9824)]: # A list of the various suits. Hearts, Diamonds, Clubs, Spades.
             for value in ["A", "J", "Q", "K"] + list(range(1,11)):
@@ -68,7 +68,7 @@ class MultiDeck:
     def draw(self) ->Card:
         """
         Draws a randomly selected card from the deck, without replacement.
-        :return card: A randomly selected card.
+        :return: A randomly selected card.
         """
         if len(self.__deck) > 0:
             card = random.choice(self.__deck.distinct_items())

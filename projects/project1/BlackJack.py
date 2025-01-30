@@ -1,8 +1,8 @@
-
+from BlackJackGame import BlackJackGame
 
 def main():
-    
-    print("Hello, World!")
+    game = BlackJackGame()
+    game.play()
 
 
 
