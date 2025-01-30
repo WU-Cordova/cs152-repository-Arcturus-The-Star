@@ -52,6 +52,14 @@ class Dealer(Player):
         self._hand.append(self.__hidden_card)
         self.score += self.__hidden_card.value
 
+    @property
+    def stay_val(self):
+        return self.__stay_val
+
+    @property
+    def hidden_card(self):
+        return self.__hidden_card
+
 class BlackJackGame:
     """
     The main logic for a game of blackjack
@@ -80,25 +88,45 @@ class BlackJackGame:
             print("Initial Deal:")
             print(f"Player's Hand:{self.__player.hand} | Score: {self.__player.score}")
             print(f"Dealer's Hand:{self.__dealer.hand} [Hidden] | Score: {self.__dealer.score}")
-            player_turn = True
+            player_turn, dealer_turn = True, True
+            if self.__player.score == 21:
+                print("Blackjack! Player wins")
+                player_turn, dealer_turn = False, False
+            elif self.__dealer.score + self.__dealer.hidden_card.value == 21:
+                print("Blackjack! Dealer wins")
+                player_turn, dealer_turn = False, False
+            print("")
             while player_turn:
+                if self.__player.score == 21:
+                    print("Blackjack! Player wins")
+                    player_turn, dealer_turn = False, False
+                elif self.__player.score > 21:
+                    print("Bust! You went over 21")
+                    player_turn = False
                 print(f"Player's Hand:{self.__player.hand} | Score: {self.__player.score}")
-                inp = input("Would you like to (H)it or (S)tay?\n>>")
-                match inp.lower():
-                    case "h":
-                        self.__player.draw()
-                        if self.__player.score == 21:
-                            print("Blackjack! Player wins")
-                            self.__player.score = "Blackjack"
+                if player_turn:
+                    inp = input("Would you like to (H)it or (S)tay?\n>>")
+                    print("")
+                    match inp.lower():
+                        case "h":
+                            self.__player.draw()
+                        case "s":
                             player_turn = False
-                        elif self.__player.score > 21:
-                            print("Bust! You went over 21")
-                            self.__player.score = "Bust"
-                            player_turn = False
-                    case "s":
-                        player_turn = False
-                    case _:
-                        print("Input not recognized. Press H to hit or S to stay")
+                        case _:
+                            print("Input not recognized. Press H to hit or S to stay")
+                print("")
+            self.__dealer.reveal_hidden()
+            while dealer_turn:
+                if self.__dealer.score == 21:
+                    print("Blackjack! Dealer wins")
+                    dealer_turn = False
+                elif self.__dealer.score > 21:
+                    print("Bust! Dealer went over 21")
+                print(f"Dealer's Hand:{self.__dealer.hand}| Score: {self.__dealer.score}")
+                if self.__dealer.score > self.__dealer.stay_val:
+                    dealer_turn = False
+                else:
+                    self.__dealer.draw()
             loop = False
 
 
