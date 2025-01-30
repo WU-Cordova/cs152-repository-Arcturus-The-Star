@@ -2,13 +2,24 @@ from datastructures.bag import Bag
 import random
 
 class Card:
-    def __init__(self, suit, name):
+    def __init__(self, suit:str, name:str | int) -> None:
+        """
+        Initializes the Card
+        :param suit: The suit of the card. Hearts, Diamonds, Clubs, or Spades. Unicode Characters
+        :param name: The name of the card. A number or a face card
+        """
         self.__suit = suit
         self.__value = name if type(name) == int else 11 if name == "A" else 10
         self.__name = name
 
-    def __str__(self):
+    def __str__(self) -> str:
         return f"{self.__name}{self.__suit}"
+
+    def flip_ace(self):
+        if self.__name == "A":
+            self.__value = 11 if self.__value == 1 else 1
+        else:
+            raise ValueError("Selected card is not Ace")
 
     @property
     def suit(self) -> str:
@@ -22,12 +33,6 @@ class Card:
     def name(self):
         return self.__name
 
-    def flip_ace(self):
-        if self.__name == "A":
-            self.__value = 11 if self.__value == 1 else 1
-        else:
-            raise ValueError("Selected card is not Ace")
-
 class MultiDeck:
     def __init__(self, num):
         self.__deck = Bag()
@@ -39,7 +44,7 @@ class MultiDeck:
                 self.__deck.add(card)
 
     def create_deck(self) -> None:
-        for suit in [chr(9829), chr(9830), chr(9827), chr(9824)]:
+        for suit in [chr(9825), chr(9826), chr(9827), chr(9824)]: # A list of the various suits. Hearts, Diamonds, Clubs, Spades.
             for value in ["A", "J", "Q", "K"] + list(range(1,11)):
                 self.__deck.add(Card(suit, value))
 
