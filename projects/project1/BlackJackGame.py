@@ -1,5 +1,5 @@
 from Card import MultiDeck, Card
-import random
+import random, time
 
 class Player:
     """
@@ -74,60 +74,93 @@ class BlackJackGame:
         """
         The game logic.
         """
-        print(".------..------..------..------..------..------..------..------..------.\n"
-              "|B.--. ||L.--. ||A.--. ||C.--. ||K.--. ||J.--. ||A.--. ||C.--. ||K.--. |\n"
-              "| :(): || :/\\: || (\\/) || :/\\: || :/\\: || :(): || (\\/) || :/\\: || :/\\: |\n"
-              "| ()() || (__) || :\\/: || :\\/: || :\\/: || ()() || :\\/: || :\\/: || :\\/: |\n"
-              "| '--'B|| '--'L|| '--'A|| '--'C|| '--'K|| '--'J|| '--'A|| '--'C|| '--'K|\n"
-              "`------'`------'`------'`------'`------'`------'`------'`------'`------'\n")
+        for i in [".------..------..------..------..------..------..------..------..------.\n",
+              "|B.--. ||L.--. ||A.--. ||C.--. ||K.--. ||J.--. ||A.--. ||C.--. ||K.--. |\n",
+              "| :(): || :/\\: || (\\/) || :/\\: || :/\\: || :(): || (\\/) || :/\\: || :/\\: |\n",
+              "| ()() || (__) || :\\/: || :\\/: || :\\/: || ()() || :\\/: || :\\/: || :\\/: |\n",
+              "| '--'B|| '--'L|| '--'A|| '--'C|| '--'K|| '--'J|| '--'A|| '--'C|| '--'K|\n",
+              "`------'`------'`------'`------'`------'`------'`------'`------'`------'\n"]:
+            print(i, end='')
+            time.sleep(.3)
         loop = True
         while loop:
             self.__deck = MultiDeck(random.choice([2, 4, 6, 8]))
             self.__player = Player(self.__deck)
             self.__dealer = Dealer(self.__deck)
             print("Initial Deal:")
+            time.sleep(.3)
             print(f"Player's Hand:{self.__player.hand} | Score: {self.__player.score}")
+            time.sleep(.3)
             print(f"Dealer's Hand:{self.__dealer.hand} [Hidden] | Score: {self.__dealer.score}")
+            time.sleep(.3)
             player_turn, dealer_turn = True, True
             if self.__player.score == 21:
-                print("Blackjack! Player wins")
+                print("Player has blackjack!")
+                time.sleep(.3)
                 player_turn, dealer_turn = False, False
             elif self.__dealer.score + self.__dealer.hidden_card.value == 21:
-                print("Blackjack! Dealer wins")
+                print("Dealer has blackjack!")
+                time.sleep(.3)
                 player_turn, dealer_turn = False, False
             print("")
+            time.sleep(.3)
             while player_turn:
+                print(f"Player's Hand:{self.__player.hand} | Score: {self.__player.score}")
+                time.sleep(.3)
                 if self.__player.score == 21:
-                    print("Blackjack! Player wins")
+                    print("Player has blackjack!")
                     player_turn, dealer_turn = False, False
                 elif self.__player.score > 21:
                     print("Bust! You went over 21")
+                    time.sleep(.3)
                     player_turn = False
-                print(f"Player's Hand:{self.__player.hand} | Score: {self.__player.score}")
                 if player_turn:
-                    inp = input("Would you like to (H)it or (S)tay?\n>>")
-                    print("")
-                    match inp.lower():
-                        case "h":
+                    match input("Would you like to (H)it or (S)tay?\n>>").lower():
+                        case "h" | "hit":
                             self.__player.draw()
-                        case "s":
+                        case "s" | "stay":
                             player_turn = False
                         case _:
                             print("Input not recognized. Press H to hit or S to stay")
                 print("")
+                time.sleep(.3)
             self.__dealer.reveal_hidden()
             while dealer_turn:
+                print(f"Dealer's Hand:{self.__dealer.hand}| Score: {self.__dealer.score}")
                 if self.__dealer.score == 21:
-                    print("Blackjack! Dealer wins")
+                    print("Dealer has blackjack!")
                     dealer_turn = False
                 elif self.__dealer.score > 21:
                     print("Bust! Dealer went over 21")
-                print(f"Dealer's Hand:{self.__dealer.hand}| Score: {self.__dealer.score}")
-                if self.__dealer.score > self.__dealer.stay_val:
+                    dealer_turn = False
+                elif self.__dealer.score >= self.__dealer.stay_val:
+                    print(">>Dealer stays")
                     dealer_turn = False
                 else:
+                    print(">>Dealer hits")
                     self.__dealer.draw()
-            loop = False
+                time.sleep(.3)
+            if ((dscore := self.__dealer.score) <= 21) and ((pscore := self.__player.score) <= 21):
+                if pscore > dscore:
+                    print("Player wins")
+                elif pscore < dscore:
+                    print("Dealer wins")
+                elif pscore == dscore:
+                    print("Scores are tied")
+            elif self.__dealer.score > 21 and not self.__player.score > 21:
+                print("Dealer busted, Player wins")
+            elif not self.__dealer.score > 21 and self.__player.score > 21:
+                print("Player busted, Dealer wins")
+            else:
+                print("Tied. Player and Dealer busted")
+            time.sleep(.3)
+            match input("Would you like to play again? (Y)es or (N)o\n>>").lower():
+                case "y" | "yes":
+                    pass
+                case "n" | "no":
+                    loop = False
+                case _:
+                    print("Input not recognized. Press Y to play again or N to quit")
 
 
 if __name__ == "__main__":
