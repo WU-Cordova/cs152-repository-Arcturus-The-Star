@@ -175,7 +175,3 @@ class BlackJackGame:
                     print("Input not recognized. Press Y to play again or N to quit")
 
         winsound.PlaySound(None, winsound.SND_ASYNC)
-
-
-if __name__ == "__main__":
-    pass

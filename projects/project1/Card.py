@@ -80,6 +80,3 @@ class MultiDeck:
     @property
     def deck(self):
         return self.__deck
-
-if __name__ == "__main__":
-    pass
