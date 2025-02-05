@@ -19,6 +19,8 @@ class Game:
         """
         defender.health -= (damage := ((roll := random.randint(1,6)) * attacker.attack_power))
         print(f"{attacker.name} attacked {defender.name} with a roll of {roll}. {defender.name} took {damage} damage")
+        time.sleep(.3)
+        print(f"{defender.name} has {max(0, defender.health)} health remaining")
 
     def check_win(self):
         if self.__player1.health < 0:
