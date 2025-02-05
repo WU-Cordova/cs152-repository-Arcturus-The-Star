@@ -18,13 +18,15 @@ class Game:
         Performs an attack where the attacker rolls a die to determine damage dealt
         """
         defender.health -= (damage := ((roll := random.randint(1,6)) * attacker.attack_power))
-        print(f"{attacker.name} attacked {defender.name} with a roll of {5}. {defender.name} took {damage} damage")
+        print(f"{attacker.name} attacked {defender.name} with a roll of {roll}. {defender.name} took {damage} damage")
 
     def check_win(self):
         if self.__player1.health < 0:
+            time.sleep(.3)
             print(f"{self.__player2.name} has won!")
             return True
         elif self.__player2.health < 0:
+            time.sleep(.3)
             print(f"{self.__player1.name} has won!")
             return True
         else:
@@ -41,9 +43,9 @@ class Game:
             if win := self.check_win():
                 in_battle = not win
                 break
-            time.sleep(.2)
+            time.sleep(.3)
             self.attack(self.__player_list[1 - starter], self.__player_list[starter])
             if win := self.check_win():
                 in_battle = not win
                 break
-            time.sleep(.2)
+            time.sleep(.3)
