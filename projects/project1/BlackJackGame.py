@@ -34,8 +34,13 @@ class Player:
         card = self.__deck.draw()
         self._hand.append(card)
         self.score += card.value
-        if (self.score > 21) and ("A" in (hand_str := [i.name for i in self._hand])) and ((ace := self._hand[hand_str.index("A")]).value == 11):
-            ace.flip_ace()
+        if (self.score > 21) and ("A" in (hand_str := [i.name for i in self._hand])):
+            while "A" in hand_str and  self.score > 21:
+                ace = (self._hand[ace_index := hand_str.index("A")])
+                if ace.value == 11:
+                    ace.flip_ace()
+                    self.__score -= 10
+                    hand_str.pop(ace_index)
 
     @property
     def hand(self):
