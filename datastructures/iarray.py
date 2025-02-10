@@ -388,15 +388,6 @@ class IArray(Sequence[T], Generic[T], ABC):
         """
         pass
 
-    @abstractmethod
-    def __grow(self) -> None:
-        """
-        Grows the array if necessary. If the array does not need to grow, exit.
-        If it does, create a new NumPy array with the new size. Copy over the elements from the current to the new.
-        Set the current array to the new one.
-        """
-        pass
-
 
 if __name__ == '__main__':
     filename = os.path.basename(__file__)

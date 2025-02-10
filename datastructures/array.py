@@ -98,8 +98,8 @@ class Array(IArray[T]):
     def __repr__(self) -> str:
         return f'Array {self.__str__()}, Logical: {self.__item_count}, Physical: {len(self.__items)}, type: {self.__data_type}'
 
-    def __grow(self) -> None:
-        pass
+    def __grow(self, new_size :int) -> None:
+        raise NotImplementedError("Grow method not implemented")
     
 
 if __name__ == '__main__':
