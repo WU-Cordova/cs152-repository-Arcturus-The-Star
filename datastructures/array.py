@@ -28,7 +28,7 @@ class Array(IArray[T]):
         self.__items = np.array(sequence_copy, data_type)
         self.__item_count = len(sequence_copy) # Logical size
         self.__data_type = data_type
-        self.__capacity = len(sequence_copy) # Physical size
+        self.__capacity = len(self.__items) # Physical size
 
     @overload
     def __getitem__(self, index: int) -> T: ...
@@ -72,10 +72,10 @@ class Array(IArray[T]):
         raise NotImplementedError('Pop front not implemented.')
 
     def __len__(self) -> int: 
-        return len(self.__items)
+        return self.__capacity
 
     def __eq__(self, other: Array[T]) -> bool:
-        return (len(self) == len(other)) and ([item for item in self] == [item for item in other])
+        return isinstance(other, Array) and (len(self) == len(other)) and ([item for item in self] == [item for item in other])
     
     def __iter__(self) -> Iterator[T]:
        return iter(self.__items)
