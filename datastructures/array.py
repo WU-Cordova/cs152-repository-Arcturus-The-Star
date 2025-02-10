@@ -10,6 +10,7 @@ from collections.abc import Sequence
 import os
 from typing import Any, Iterator, overload
 import numpy as np
+import copy
 from numpy.typing import NDArray
 
 
@@ -23,20 +24,40 @@ class Array(IArray[T]):
             raise ValueError("starting_sequence should be a sequence")
         if not isinstance(data_type, type):
             raise ValueError("data_type should be a type")
-        self.__items = None
-        self.__item_count = None
+        sequence_copy = copy.deepcopy(starting_sequence)
+        self.__items = np.array(sequence_copy, data_type)
+        self.__item_count = len(sequence_copy) # Logical size
         self.__data_type = data_type
-        self.__capacity = None
+        self.__capacity = len(sequence_copy) # Physical size
 
     @overload
     def __getitem__(self, index: int) -> T: ...
     @overload
     def __getitem__(self, index: slice) -> Sequence[T]: ...
     def __getitem__(self, index: int | slice) -> T | Sequence[T]:
-        raise NotImplementedError('Indexing not implemented.')
+        valid_range = range(-self.__item_count, self.__item_count + 1)
+        if isinstance(index, slice):
+            start = index.start if index.start else 0
+            stop = index.stop if index.start else -1
+            step = index.step if index.step else 1
+            if start not in valid_range and stop not in valid_range:
+                raise IndexError("Slide not in range")
+            else:
+                return Array(starting_sequence=self.__items[start:stop:step].tolist(), data_type=self.__data_type)
+        else:
+            if index not in valid_range:
+                raise IndexError("Index not in range")
+            else:
+                item = self.__items[index]
+                return item.item() if isinstance(item, np.generic) else item
     
     def __setitem__(self, index: int, item: T) -> None:
-        raise NotImplementedError('Indexing not implemented.')
+        if index not in range(-self.__item_count, self.__item_count + 1):
+            raise IndexError("Index out of range")
+        elif not isinstance(item, self.__data_type):
+            raise TypeError("Data type does not match")
+        else:
+            self.__items[index] = item
 
     def append(self, data: T) -> None:
         raise NotImplementedError('Append not implemented.')
@@ -51,22 +72,22 @@ class Array(IArray[T]):
         raise NotImplementedError('Pop front not implemented.')
 
     def __len__(self) -> int: 
-        raise NotImplementedError('Length not implemented.')
+        return len(self.__items)
 
-    def __eq__(self, other: object) -> bool:
-        raise NotImplementedError('Equality not implemented.')
+    def __eq__(self, other: Array[T]) -> bool:
+        return (len(self) == len(other)) and ([item for item in self] == [item for item in other])
     
     def __iter__(self) -> Iterator[T]:
-        raise NotImplementedError('Iteration not implemented.')
+       return iter(self.__items)
 
     def __reversed__(self) -> Iterator[T]:
-        raise NotImplementedError('Reversal not implemented')
+        return iter(Array(starting_sequence=list(self.__items)[::-1], data_type=self.__data_type))
 
     def __delitem__(self, index: int) -> None:
         raise NotImplementedError('Delete not implemented.')
 
     def __contains__(self, item: Any) -> bool:
-        raise NotImplementedError('Contains not implemented.')
+        return any([item == other_item for other_item in self])
 
     def clear(self) -> None:
         raise NotImplementedError('Clear not implemented.')
