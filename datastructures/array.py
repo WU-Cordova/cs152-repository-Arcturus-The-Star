@@ -21,12 +21,15 @@ class Array(IArray[T]):
 
     def __init__(self, starting_sequence: Sequence[T]=[], data_type: type=object) -> None: 
         if not isinstance(starting_sequence, Sequence):
-            raise ValueError("starting_sequence should be a sequence")
+            raise ValueError("Starting_sequence should be a sequence")
         if not isinstance(data_type, type):
-            raise ValueError("data_type should be a type")
+            raise ValueError("Data_type should be a type")
+        for i in starting_sequence:
+            if type(i) != data_type:
+                raise TypeError("Data type and items in the starting sequence do not line up")
         sequence_copy = copy.deepcopy(starting_sequence)
         self.__items = np.array(sequence_copy, data_type)
-        self.__item_count = len(sequence_copy) # Logical size
+        self.__item_count = len(self.__items) # Logical size
         self.__data_type = data_type
         self.__capacity = len(self.__items) # Physical size
 
@@ -41,9 +44,9 @@ class Array(IArray[T]):
             stop = index.stop if index.start else -1
             step = index.step if index.step else 1
             if start not in valid_range and stop not in valid_range:
-                raise IndexError("Slide not in range")
+                raise IndexError("Slice not in range")
             else:
-                return Array(starting_sequence=self.__items[start:stop:step].tolist(), data_type=self.__data_type)
+                return Array(starting_sequence=self.__items.tolist()[start:stop:step], data_type=self.__data_type)
         else:
             if index not in valid_range:
                 raise IndexError("Index not in range")
@@ -60,7 +63,11 @@ class Array(IArray[T]):
             self.__items[index] = item
 
     def append(self, data: T) -> None:
-        raise NotImplementedError('Append not implemented.')
+        if type(data) != self.__data_type:
+            raise TypeError(f"This Array has a data type of {self.__data_type} and does not accept other types")
+        self.__grow()
+        self.__items[self.__item_count] = data
+        self.__item_count += 1
 
     def append_front(self, data: T) -> None:
         raise NotImplementedError('Append front not implemented.')
@@ -72,13 +79,13 @@ class Array(IArray[T]):
         raise NotImplementedError('Pop front not implemented.')
 
     def __len__(self) -> int: 
-        return self.__capacity
+        return self.__item_count
 
     def __eq__(self, other: Array[T]) -> bool:
         return isinstance(other, Array) and (len(self) == len(other)) and ([item for item in self] == [item for item in other])
     
     def __iter__(self) -> Iterator[T]:
-       return iter(self.__items)
+       return iter(self.__items[:self.__item_count + 1])
 
     def __reversed__(self) -> Iterator[T]:
         return iter(Array(starting_sequence=list(self.__items)[::-1], data_type=self.__data_type))
@@ -90,16 +97,30 @@ class Array(IArray[T]):
         return any([item == other_item for other_item in self])
 
     def clear(self) -> None:
-        raise NotImplementedError('Clear not implemented.')
+        self.__items = np.array([], self.__data_type)
+        self.__capacity = 0
+        self.__item_count = 0
 
     def __str__(self) -> str:
-        return '[' + ', '.join(str(item) for item in self) + ']'
+        return '[' + ', '.join(str(item) for item in list(self)[:self.__item_count]) + ']'
     
     def __repr__(self) -> str:
         return f'Array {self.__str__()}, Logical: {self.__item_count}, Physical: {len(self.__items)}, type: {self.__data_type}'
 
-    def __grow(self, new_size :int) -> None:
-        raise NotImplementedError("Grow method not implemented")
+    def __grow(self):
+        if self.__capacity > self.__item_count:
+            return
+        else:
+            new_ar = np.array([self.__data_type() for i in range((self.__capacity * 2) if self.__capacity else 1)], self.__data_type)
+            for i in range(len(self)):
+                try:
+                    new_ar[i] = self.__items[i]
+                except IndexError:
+                    break
+            self.__capacity = len(new_ar)
+            self.__items = new_ar
+
+
     
 
 if __name__ == '__main__':
