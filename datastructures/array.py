@@ -46,13 +46,15 @@ class Array(IArray[T]):
             if start not in valid_range and stop not in valid_range:
                 raise IndexError("Slice not in range")
             else:
-                return Array(starting_sequence=self.__items.tolist()[start:stop:step], data_type=self.__data_type)
-        else:
+                return Array(starting_sequence=(self.__items[start:stop:step]).tolist(), data_type=self.__data_type)
+        elif isinstance(index, int):
             if index not in valid_range:
                 raise IndexError("Index not in range")
             else:
                 item = self.__items[index]
                 return item.item() if isinstance(item, np.generic) else item
+        else:
+            raise TypeError("Bracket operation should be of type int or slice")
     
     def __setitem__(self, index: int, item: T) -> None:
         if index not in range(-self.__item_count, self.__item_count + 1):
@@ -88,7 +90,7 @@ class Array(IArray[T]):
        return iter(self.__items[:self.__item_count + 1])
 
     def __reversed__(self) -> Iterator[T]:
-        return iter(Array(starting_sequence=list(self.__items)[::-1], data_type=self.__data_type))
+        return iter(list(self.__items)[::-1])
 
     def __delitem__(self, index: int) -> None:
         raise NotImplementedError('Delete not implemented.')
