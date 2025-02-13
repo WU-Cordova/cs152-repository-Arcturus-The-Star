@@ -97,7 +97,13 @@ class Array(IArray[T]):
         return iter(list(self.__items)[::-1])
 
     def __delitem__(self, index: int) -> None:
-        raise NotImplementedError('Delete not implemented.')
+        if index not in range(-self.__item_count, self.__item_count + 1):
+            raise IndexError("Index out of range")
+        else:
+            data_list = self.__items.tolist()
+            self.__items = np.array(data_list[:index] + data_list[index + 1:] + [self.__data_type()], self.__data_type)
+            self.__item_count -= 1
+            self.__shrink()
 
     def __contains__(self, item: Any) -> bool:
         return any([item == other_item for other_item in self])
@@ -126,9 +132,16 @@ class Array(IArray[T]):
             self.__capacity = len(new_ar)
             self.__items = new_ar
 
+    def __shrink(self):
+        pass
+
 
     
 
 if __name__ == '__main__':
     filename = os.path.basename(__file__)
     print(f'This is the {filename} file.\nDid you mean to run your tests or program.py file?\nFor tests, run them from the Test Explorer on the left.')
+    ar = Array([1,2,3], int)
+    print(repr(ar))
+    del ar[1]
+    print(repr(ar))
