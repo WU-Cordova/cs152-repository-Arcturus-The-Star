@@ -25,7 +25,7 @@ class Array(IArray[T]):
         if not isinstance(data_type, type):
             raise ValueError("Data_type should be a type")
         for i in starting_sequence:
-            if type(i) != data_type:
+            if not isinstance(i, data_type):
                 raise TypeError("Data type and items in the starting sequence do not line up")
         sequence_copy = copy.deepcopy(starting_sequence)
         self.__items = np.array(sequence_copy, data_type)
@@ -72,7 +72,7 @@ class Array(IArray[T]):
         self.__item_count += 1
 
     def append_front(self, data: T) -> None:
-        raise NotImplementedError('Append front not implemented.')
+        pass
 
     def pop(self) -> None:
         raise NotImplementedError('Pop not implemented.')
