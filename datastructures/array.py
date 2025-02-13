@@ -26,7 +26,7 @@ class Array(IArray[T]):
             raise ValueError("Data_type should be a type")
         for i in starting_sequence:
             if not isinstance(i, data_type):
-                raise TypeError("Data type and items in the starting sequence do not line up")
+                raise TypeError("Data type and items in the starting sequence are not the same type")
         sequence_copy = copy.deepcopy(starting_sequence)
         self.__items = np.array(sequence_copy, data_type)
         self.__item_count = len(self.__items) # Logical size
@@ -43,13 +43,13 @@ class Array(IArray[T]):
             start = index.start if index.start else 0
             stop = index.stop if index.start else -1
             step = index.step if index.step else 1
-            if start not in valid_range and stop not in valid_range:
-                raise IndexError("Slice not in range")
+            if start not in valid_range or stop not in valid_range:
+                raise IndexError("Index out of bounds")
             else:
                 return Array(starting_sequence=(self.__items[start:stop:step]).tolist(), data_type=self.__data_type)
         elif isinstance(index, int):
             if index not in valid_range:
-                raise IndexError("Index not in range")
+                raise IndexError("Index out of bounds")
             else:
                 item = self.__items[index]
                 return item.item() if isinstance(item, np.generic) else item
@@ -58,9 +58,9 @@ class Array(IArray[T]):
     
     def __setitem__(self, index: int, item: T) -> None:
         if index not in range(-self.__item_count, self.__item_count + 1):
-            raise IndexError("Index out of range")
+            raise IndexError("Index out of bounds")
         elif not isinstance(item, self.__data_type):
-            raise TypeError("Data type does not match")
+            raise TypeError(f"Input should be of type {self.__data_type}")
         else:
             self.__items[index] = item
 
@@ -78,11 +78,15 @@ class Array(IArray[T]):
             self.__items[i] = new_contents[i]
         self.__item_count += 1
 
-    def pop(self) -> None:
-        raise NotImplementedError('Pop not implemented.')
+    def pop(self) -> T:
+        item = self[-1]
+        del self[-1]
+        return item
     
-    def pop_front(self) -> None:
-        raise NotImplementedError('Pop front not implemented.')
+    def pop_front(self) -> T:
+        item = self[0]
+        del self[0]
+        return item
 
     def __len__(self) -> int: 
         return self.__item_count
@@ -119,21 +123,32 @@ class Array(IArray[T]):
     def __repr__(self) -> str:
         return f'Array {self.__str__()}, Logical: {self.__item_count}, Physical: {len(self.__items)}, type: {self.__data_type}'
 
-    def __grow(self):
+    def __grow(self) -> None:
+        """
+        Grows the internal array to double its current size if the logical size (item_count) reaches the physical size (capacity).
+        """
         if self.__capacity > self.__item_count:
             return
         else:
             new_ar = np.array([self.__data_type() for i in range((self.__capacity * 2) if self.__capacity else 1)], self.__data_type)
             for i in range(len(self)):
-                try:
-                    new_ar[i] = self.__items[i]
-                except IndexError:
-                    break
+                new_ar[i] = self.__items[i]
             self.__capacity = len(new_ar)
             self.__items = new_ar
 
-    def __shrink(self):
-        pass
+    def __shrink(self) -> None:
+        """
+        Shrinks the array to half of its current size if the logical size (item_count) reaches one quarter of the physical size (capacity)
+        """
+        if self.__item_count > self.__capacity // 4:
+            return
+        else:
+            new_ar = np.array([self.__data_type() for i in range(self.__capacity // 2)], self.__data_type)
+            for i in range(len(self)):
+                new_ar[i] = self.__items[i]
+            self.__capacity = len(new_ar)
+            self.__items = new_ar
+
 
 
     
@@ -141,7 +156,3 @@ class Array(IArray[T]):
 if __name__ == '__main__':
     filename = os.path.basename(__file__)
     print(f'This is the {filename} file.\nDid you mean to run your tests or program.py file?\nFor tests, run them from the Test Explorer on the left.')
-    ar = Array([1,2,3], int)
-    print(repr(ar))
-    del ar[1]
-    print(repr(ar))
