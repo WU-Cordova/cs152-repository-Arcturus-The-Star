@@ -72,7 +72,11 @@ class Array(IArray[T]):
         self.__item_count += 1
 
     def append_front(self, data: T) -> None:
-        pass
+        self.__grow()
+        new_contents = [data] + self.__items.tolist()[:self.__item_count]
+        for i in range(len(self.__items[:self.__item_count])):
+            self.__items[i] = new_contents[i]
+        self.__item_count += 1
 
     def pop(self) -> None:
         raise NotImplementedError('Pop not implemented.')
