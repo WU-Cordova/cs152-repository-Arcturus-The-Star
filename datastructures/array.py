@@ -19,7 +19,7 @@ from datastructures.iarray import IArray, T
 
 class Array(IArray[T]):  
 
-    def __init__(self, starting_sequence: Sequence[T]=[], data_type: type=object) -> None: 
+    def __init__(self, starting_sequence: Sequence[T]=[], data_type: type=object) -> None:
         if not isinstance(starting_sequence, Sequence):
             raise TypeError("Starting_sequence should be a sequence")
         if not isinstance(data_type, type):
@@ -40,10 +40,10 @@ class Array(IArray[T]):
     def __getitem__(self, index: int | slice) -> T | Sequence[T]:
         valid_range = range(-self.__item_count, self.__item_count + 1)
         if isinstance(index, slice):
-            start = index.start if index.start else 0
-            stop = index.stop if index.start else -1
+            start = index.start if index.start else None
+            stop = index.stop if index.start else None
             step = index.step if index.step else 1
-            if start not in valid_range or stop not in valid_range:
+            if (start not in valid_range or stop not in valid_range) and (start is not None or stop is not None):
                 raise IndexError("Index out of bounds")
             else:
                 return Array(starting_sequence=(self.__items[start:stop:step]).tolist(), data_type=self.__data_type)
