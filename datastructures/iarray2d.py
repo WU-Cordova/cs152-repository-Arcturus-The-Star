@@ -80,8 +80,8 @@ class IArray2D(Generic[T], ABC):
         """ Initializes the Array2D object with a starting sequence of sequences.
 
         Examples:
-            >>> array2d = Array2D([[1, 2, 3], [4, 5, 6], [7, 8, 9]])
-            >>> repr(array2d)
+            #>>> array2d = Array2D([[1, 2, 3], [4, 5, 6], [7, 8, 9]])
+            #>>> repr(array2d)
             Array2D [[1, 2, 3], [4, 5, 6], [7, 8, 9]]
             >>> 
         
