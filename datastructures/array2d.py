@@ -110,6 +110,9 @@ class Array2D(IArray2D[T]):
                     is_equal.append(self[i][j] == other[i][j])
             return all(is_equal)
 
+    def tolist(self) ->list:
+        return [[self[j][i] for i in range(self.width)] for j in range(len(self))]
+
 if __name__ == '__main__':
     filename = os.path.basename(__file__)
     print(f'This is the {filename} file.\nDid you mean to run your tests or program.py file?\nFor tests, run them from the Test Explorer on the left.')
