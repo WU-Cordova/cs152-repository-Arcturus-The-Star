@@ -96,6 +96,19 @@ class Array2D(IArray2D[T]):
     def __repr__(self) -> str: 
         return f'Array2D {self.__num_rows} Rows x {self.__num_columns} Columns, items: {str(self)}'
 
+    @property
+    def width(self) ->int:
+        return self.__num_columns
+
+    def __eq__(self,other:Array2D):
+        if len(self) != len(other):
+            return False
+        else:
+            is_equal = []
+            for i in range(len(self)):
+                for j in range(self.width):
+                    is_equal.append(self[i][j] == other[i][j])
+            return all(is_equal)
 
 if __name__ == '__main__':
     filename = os.path.basename(__file__)
