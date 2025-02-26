@@ -3,7 +3,7 @@ class Cell:
         if not isinstance(status, bool):
             raise TypeError("Status should be a boolean")
         self.__neighbors:int = 0 # Live neighbors
-        self.__will_be_alive:bool = False
+        self.__will_be_alive:bool = status
         self.__living:bool = status
 
     @property
@@ -25,3 +25,11 @@ class Cell:
     @neighbors.setter
     def neighbors(self, neighbors) ->None:
         self.__neighbors = neighbors
+
+    def prospective_life(self):
+        if self.__neighbors == 2:
+            self.__will_be_alive = self.__living
+        elif self.__neighbors == 3:
+            self.__will_be_alive = True
+        else:
+            self.__will_be_alive = False
