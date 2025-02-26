@@ -10,10 +10,6 @@ class Cell:
     def living(self) ->bool:
         return self.__living
 
-    @living.setter
-    def living(self, status:bool) ->None:
-        self.__living = status
-
     @property
     def will_be_alive(self) ->bool:
         return self.__will_be_alive
@@ -33,3 +29,6 @@ class Cell:
             self.__will_be_alive = True
         else:
             self.__will_be_alive = False
+
+    def update_life(self):
+        self.__living = self.__will_be_alive
