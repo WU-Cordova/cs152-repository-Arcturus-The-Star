@@ -1,6 +1,6 @@
 ROWS:3
 COLS:5
 GRID:
-ooooo
-ooooo
-ooooo
+ooxoo
+ooxoo
+ooxoo

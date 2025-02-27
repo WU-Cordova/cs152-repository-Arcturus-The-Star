@@ -116,7 +116,7 @@ class GameController:
         if len(symbol_list) != rows or len(symbol_list[0]) != cols:
             raise ValueError("Invalid configuration file, ROWS or COLS is not the correct value")
         for i in symbol_list:
-            if len(i) == len(symbol_list[0]):
+            if not len(i) == len(symbol_list[0]):
                 raise ValueError("All rows in GRID should be the same length")
         output = []
         for line in symbol_list:
