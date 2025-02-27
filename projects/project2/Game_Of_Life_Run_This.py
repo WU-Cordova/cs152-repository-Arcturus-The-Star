@@ -1,7 +1,8 @@
-
+from GameController import GameController
 
 def main():
-    pass
+    gc = GameController()
+    gc.start()
 
 if __name__ == "__main__":
     main()

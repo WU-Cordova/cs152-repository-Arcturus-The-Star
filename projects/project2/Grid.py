@@ -8,6 +8,8 @@ class Grid(Array2D):
         super(Grid, self).__init__([[Cell((j,i), input_permutation[j][i]) for i in range(len(input_permutation[0]))] for j in range(len(input_permutation))], Cell)
         self.__living_cells = 0
         self.count_living()
+        self.update_all_neighbors()
+        self.predict_all_cells()
 
     @property
     def living_cells(self):

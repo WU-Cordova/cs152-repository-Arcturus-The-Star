@@ -46,9 +46,9 @@ class Cell:
 
     def __str__(self):
         if self.living:
-            return "\u25A1"
-        else:
             return "\u25A0"
+        else:
+            return "\u25A1"
 
     def __repr__(self):
         return f"{"Living" if self.living else "Dead"} Cell at Row:{self.coordinates[0]}, Column:{self.coordinates[1]} with {self.neighbors} neighbors, predicted to be {"Living" if self.__will_be_alive else "Dead"}"
