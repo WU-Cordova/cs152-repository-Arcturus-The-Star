@@ -5,7 +5,7 @@ from kbhit import KBHit
 
 class GameController:
     def __init__(self):
-        self.__grid = None
+        self.__grid:Grid = Grid([[]])
         self.__previous_grids:list[Grid] = []
         self.__storage_count:int = 5
         self.__sim_speed:int = 1
@@ -55,11 +55,12 @@ class GameController:
             self.__grid = Grid(board)
             #Game section
             print(f"Board loaded.\nNote: \u25A0 denotes a living cell and \u25A1 denotes a dead one")
-            print("Controls:\nPress 'Q' to qui\nPress 'S' to step the simulation forward\nPress 'A' to activate automatic mode\nPress 'M' to return to automatic mode")
-            kb = KBHit()
-            turn = 0
-            repeat = False
-            death = False
+            print("Controls:\nPress 'Q' to qui\nPress 'S' to step the simulation forward\nPress 'A' to activate automatic mode\nPress 'M' to return to manual mode")
+            kb:KBHit = KBHit()
+            turn:int = 0
+            repeat:bool = False
+            death:bool = False
+            self.__manual_mode = True
             while not death and not repeat:
                 self.__grid.count_living()
                 print(f"Turn: {turn}\n{self.__grid}")
@@ -73,6 +74,7 @@ class GameController:
                 self.__grid = next_grid
                 if self.__grid.living_cells <= 0: # Death condition
                     print(f"All the cells died...\nThe game lasted {turn} rounds")
+                    self.__manual_mode = False
                     death = True
                 if kb.kbhit(): # Check for keyboard hits
                     c = kb.getch()
@@ -83,7 +85,7 @@ class GameController:
                         case "M":
                             print("Manual Mode, press 'S' to step and 'A' to return to automatic")
                             self.__manual_mode = True
-                if self.__manual_mode:
+                if self.__manual_mode: # Manual mode brake, stops loop until manually advanced
                     while True:
                         if kb.kbhit():
                             c = kb.getch()
@@ -97,7 +99,8 @@ class GameController:
                                     break
                                 case "S":
                                     break
-                else:
+                elif not (death or repeat):
+
                     time.sleep(self.__sim_speed)
             while rep := input("Would you like to play again? (Y/N)\n>"):
                 match rep.strip().upper():
@@ -168,10 +171,12 @@ class GameController:
         :param turn: The current turn, used to print counter in case of game over.
         """
         if self.__grid in self.__previous_grids[:-1]:
-            print(f"Ended due to repeats.\nThe game lasted {turn} rounds.")
+            print(f"Ended due to a repeating pattern.\nThe game lasted {turn} rounds.")
+            self.__manual_mode = False
             return True
         elif self.__grid == self.__previous_grids[-1] if len(self.__previous_grids) else False:
             print(f"Ended due to stability.\nThe game lasted {turn} rounds.")
+            self.__manual_mode = False
             return True
         else:
             return False

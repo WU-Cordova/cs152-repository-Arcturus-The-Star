@@ -10,7 +10,7 @@ class Grid(Array2D):
         :param input_permutation: A list of lists of booleans, used to build the grid.
         """
         super(Grid, self).__init__([[Cell((j,i), input_permutation[j][i]) for i in range(len(input_permutation[0]))] for j in range(len(input_permutation))], Cell)
-        self.__living_cells = 0
+        self.__living_cells:int = 0
         self.count_living()
         self.update_all_neighbors()
         self.predict_all_cells()
@@ -23,20 +23,20 @@ class Grid(Array2D):
         """
         Counts the number of living cells in the grid
         """
-        counter = 0
+        counter:int = 0
         for i in self:
             for j in i:
                 if j.living:
                     counter += 1
         self.__living_cells = counter
 
-    def __update_neighbors(self, row, col):
+    def __update_neighbors(self, row:int, col:int):
         """
         Takes a cell at the specified coordinates and updates its number of neighbors
         :param row: The row coordinate of the desired cell
         :param col: The column coordinate of the desired cell
         """
-        neighbors = []
+        neighbors:list = []
         for i in range(-1,2):
             for j in range(-1,2):
                 if  (0 <= row + i < len(self) and 0 <= col + j < self.width) and not (i == 0 and j == 0):
@@ -68,7 +68,7 @@ class Grid(Array2D):
                 self[row][col].update_life()
 
     def __str__(self):
-        output = ""
+        output:str = ""
         for i in range(len(self)):
             for j in range(self.width):
                 output += str(self[i][j]) + "  "

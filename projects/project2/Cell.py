@@ -29,7 +29,7 @@ class Cell:
         return self.__neighbors
 
     @neighbors.setter
-    def neighbors(self, neighbors) ->None:
+    def neighbors(self, neighbors:int) ->None:
         self.__neighbors = neighbors
 
     def prospective_life(self):
