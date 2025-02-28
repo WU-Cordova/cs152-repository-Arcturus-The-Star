@@ -50,7 +50,7 @@ class Grid(Array2D):
         output = ""
         for i in range(len(self)):
             for j in range(self.width):
-                output += str(self[i][j]) + " "
+                output += str(self[i][j]) + "  "
             output += "\n"
         return output
 
