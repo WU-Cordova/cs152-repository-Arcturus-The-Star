@@ -9,12 +9,16 @@ class GameController:
         self.__previous_grids:list[Grid] = []
         self.__storage_count:int = 5
         self.__sim_speed:int = 1
-        self.__manual_mode:bool = False
+        self.__manual_mode:bool = True
 
     def start(self):
+        """
+        Begins the game of life.
+        """
         game = True
-        while game:
+        while game: # Main game loop
             print("Welcome to the Game of Life.")
+            # Loading section
             while board_state:= input("To begin, input 'l' to load a file, 'r' to generate a random board, or 'q' to quit.\n>") + " ":
                 match board_state.lower().strip():
                     case "l":
@@ -49,8 +53,9 @@ class GameController:
                     case _:
                         print("Input not recognized, please try again")
             self.__grid = Grid(board)
-            print(f"Board loaded.\nNote: \u25A0 denotes a living cell and \u25A1 denotes a dead one\n{self.__grid}")
-            input("Controls:\nPress 'Q' to quit\nPress 'M' to activate manual mode\nPress 'S' to step manual mode forward\nPress 'A' to return to automatic mode\nPress 'Enter' to begin the simulation\n")
+            #Game section
+            print(f"Board loaded.\nNote: \u25A0 denotes a living cell and \u25A1 denotes a dead one")
+            print("Controls:\nPress 'Q' to qui\nPress 'S' to step the simulation forward\nPress 'A' to activate automatic mode\nPress 'M' to return to automatic mode")
             kb = KBHit()
             turn = 0
             repeat = False
@@ -66,10 +71,10 @@ class GameController:
                 repeat = self.check_repeat(turn)
                 self.add_to_prev()
                 self.__grid = next_grid
-                if self.__grid.living_cells <= 0:
+                if self.__grid.living_cells <= 0: # Death condition
                     print(f"All the cells died...\nThe game lasted {turn} rounds")
                     death = True
-                if kb.kbhit():
+                if kb.kbhit(): # Check for keyboard hits
                     c = kb.getch()
                     match c.upper():
                         case "Q":
@@ -106,6 +111,11 @@ class GameController:
 
     @staticmethod
     def read_config(config) ->list[list[bool]]:
+        """
+        Reads a configuration file
+        :param config: The name of the configuration file minus the .txt file extension
+        :return: Grid configuration
+        """
         with open("GOL_Configs/" + config + ".txt") as f:
             rows = int(f.readline().strip().split(":")[1])
             cols = int(f.readline().strip().split(":")[1])
@@ -134,9 +144,18 @@ class GameController:
 
     @staticmethod
     def random_config(rows, cols) ->list[list[bool]]:
+        """
+        Creates a random grid configuration with each cell having a 50% chance of being living or dead
+        :param rows: The number of rows desired
+        :param cols: The number of columns desired
+        :return: Grid configuration
+        """
         return [[bool(getrandbits(1)) for _ in range(cols)] for _ in range(rows)]
 
     def add_to_prev(self):
+        """
+        Adds the current grid to the previous grids, deleting the oldest if necessary
+        """
         if len(self.__previous_grids) >= self.__storage_count:
             del self.__previous_grids[0]
             self.__previous_grids.append(self.__grid)
@@ -144,6 +163,10 @@ class GameController:
             self.__previous_grids.append(self.__grid)
 
     def check_repeat(self, turn) ->bool:
+        """
+        Checks if the current grid is the same as any previously recorded grid
+        :param turn: The current turn, used to print counter in case of game over.
+        """
         if self.__grid in self.__previous_grids[:-1]:
             print(f"Ended due to repeats.\nThe game lasted {turn} rounds.")
             return True

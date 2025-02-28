@@ -2,9 +2,8 @@ class Cell:
     def __init__(self, coords:tuple, status:bool = False):
         """
         A single cell of the game of life
-        Parameters:
-            coords: The coordinates of the cell, in (Row, Column) form
-            status: True if the cell is living, False if it is dead. Defaults to False
+        :param coords: The coordinates of the cell, in (Row, Column) form
+        :param status: True if the cell is living, False if it is dead. Defaults to False
         """
         if not isinstance(status, bool):
             raise TypeError("Status should be a boolean")
@@ -34,6 +33,9 @@ class Cell:
         self.__neighbors = neighbors
 
     def prospective_life(self):
+        """
+        Uses the cell's number of living neighbors to calculate if it will be alive in the next round and updates the __will_be_alive attribute.
+        """
         if self.__neighbors == 2:
             self.__will_be_alive = self.__living
         elif self.__neighbors == 3:
@@ -42,6 +44,9 @@ class Cell:
             self.__will_be_alive = False
 
     def update_life(self):
+        """
+        Changes the cell's current living status to its prospective status.
+        """
         self.__living = self.__will_be_alive
 
     def __str__(self):
