@@ -1,0 +1,1 @@
+Blackjack using the bag datastructure. Run BlackJack.py to play the game.

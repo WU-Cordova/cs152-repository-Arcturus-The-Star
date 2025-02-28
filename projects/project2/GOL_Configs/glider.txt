@@ -1,0 +1,17 @@
+ROWS:14
+COLS:14
+GRID:
+oooooooooooooo
+oooxoooooooooo
+oxoxoooooooooo
+ooxxoooooooooo
+oooooooooooooo
+oooooooooooooo
+oooooooooooooo
+oooooooooooooo
+oooooooooooooo
+oooooooooooooo
+oooooooooooooo
+oooooooooooooo
+oooooooooooooo
+oooooooooooooo
