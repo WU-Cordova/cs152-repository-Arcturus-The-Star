@@ -89,3 +89,4 @@ class TestArrayStack:
     def test_repr(self, stack: ArrayStack) -> None:
         stack.push(1)
         stack.push(2)
+        assert repr(stack) == 'ArrayStack(5): items: [1, 2]'

@@ -12,6 +12,7 @@ class Bag(IBag[T]):
         Returns:
             None
         """
+        items = list(items[0])
         self.__bag = {}
         if items:
             for i in items:

@@ -14,19 +14,33 @@ class ArrayStack(IStack[T]):
                 max_size: int -- The maximum size of the stack. 
                 data_type: type -- The data type of the stack.       
         '''
-        raise NotImplementedError('ArrayStack is not implemented')
+        self.__data_type = data_type
+        self.stack = Array([self.__data_type() for i in range(max_size)], data_type)
+        self.__max_size = max_size
+        self.__top = -1
 
     def push(self, item: T) -> None:
-        raise NotImplementedError
+        if self.__top == self.__max_size - 1:
+            raise IndexError("Stack is full")
+        elif not isinstance(item, self.__data_type):
+            raise TypeError("Item type is invalid")
+        else:
+            self.__top += 1
+            self.stack[self.__top] = item
 
     def pop(self) -> T:
-       raise NotImplementedError
+        if self.__top == -1:
+            raise IndexError("Stack is empty")
+        else:
+            item = self.stack[self.__top]
+            self.__top -= 1
+            return item
 
     def clear(self) -> None:
-       raise NotImplementedError
+       self.__top = -1
     @property
     def peek(self) -> T:
-       raise NotImplementedError
+       return self.stack[self.__top]
 
     @property
     def maxsize(self) -> int:
@@ -35,7 +49,7 @@ class ArrayStack(IStack[T]):
             Returns:
                 int: The maximum size of the stack.
         '''
-        return len(self.stack)
+        return self.__max_size
     
     @property
     def full(self) -> bool:
@@ -44,23 +58,23 @@ class ArrayStack(IStack[T]):
             Returns:
                 bool: True if the stack is full, False otherwise.
         '''
-        raise NotImplementedError
+        return self.__top == self.__max_size - 1
 
     @property
     def empty(self) -> bool:
-        return self._top == 0
+        return self.__top == -1
 
     def __eq__(self, other: object) -> bool:
-       raise NotImplementedError
+       return self.stack == other.stack
 
     def __len__(self) -> int:
-       raise NotImplementedError
+       return self.__top + 1
     
     def __contains__(self, item: T) -> bool:
-       raise NotImplementedError
+       return item in self.stack
 
     def __str__(self) -> str:
-        return str([self.stack[i] for i in range(self._top)])
+        return str([self.stack[i] for i in range(self.__top + 1)])
     
     def __repr__(self) -> str:
         return f"ArrayStack({self.maxsize}): items: {str(self)}"
