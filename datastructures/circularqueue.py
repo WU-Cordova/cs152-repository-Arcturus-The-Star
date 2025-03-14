@@ -75,7 +75,7 @@ class CircularQueue(IQueue[T]):
         else:
             equality = []
             for i in range(len(self)):
-                equality.append((self_thing := self.circularqueue[((self.__front + i) % (self.__max_size + 1) )])== (other_thing := (other.circularqueue[(other.front_pointer + i) % (other.maxsize + 1)])))
+                equality.append((self.circularqueue[((self.__front + i) % (self.__max_size + 1) )]) == (other.circularqueue[(other.front_pointer + i) % (other.maxsize + 1)]))
             return all(equality)
 
 
