@@ -75,16 +75,8 @@ class CircularQueue(IQueue[T]):
         if not len(self) == len(other):
             return False
         else:
-            s_queue = deepcopy(self)
-            o_queue = deepcopy(other)
-            eq = []
-            for _ in range(len(self)):
-                eq.append(s_queue.dequeue() == o_queue.dequeue())
-            return all(eq)
+            return all([deepcopy(self).dequeue() == deepcopy(other).dequeue() for _ in range(len(self))])
 
-
-
-    
     def __len__(self) -> int:
         return (self.__rear - self.__front + self.__max_size + 1) % (self.__max_size + 1)
 
@@ -93,4 +85,3 @@ class CircularQueue(IQueue[T]):
 
     def __repr__(self) -> str:
         return f'ArrayQueue({repr(self.__queue)})'
-                                  

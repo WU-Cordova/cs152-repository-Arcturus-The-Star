@@ -69,12 +69,7 @@ class ArrayStack(IStack[T]):
         if not len(self) == len(other):
             return False
         else:
-            s_stack = deepcopy(self)
-            o_stack = deepcopy(other)
-            eq = []
-            for _ in range(len(self)):
-                eq.append(s_stack.pop() == o_stack.pop())
-            return all(eq)
+            return all([deepcopy(self).pop() == deepcopy(other).pop() for _ in range(len(self))])
 
 
     def __len__(self) -> int:
