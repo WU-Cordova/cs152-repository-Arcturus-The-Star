@@ -2,6 +2,8 @@ from typing import Any
 
 from datastructures.array import Array
 from datastructures.iqueue import IQueue, T
+from copy import deepcopy
+
 
 class CircularQueue(IQueue[T]):
     """ Represents a fixed-size circular queue. The queue
@@ -20,7 +22,7 @@ class CircularQueue(IQueue[T]):
         '''
         self.__data_type = data_type
         self.__max_size = maxsize
-        self.circularqueue = Array([self.__data_type() for _ in range(self.__max_size + 1)])
+        self.__queue = Array([self.__data_type() for _ in range(self.__max_size + 1)])
         self.__front = 0
         self.__rear = 0
 
@@ -30,14 +32,14 @@ class CircularQueue(IQueue[T]):
         elif self.full:
             raise IndexError("Queue is full")
         else:
-            self.circularqueue[self.__rear] = item
+            self.__queue[self.__rear] = item
             self.__rear = (self.__rear + 1) % (self.__max_size + 1)
 
     def dequeue(self) -> T:
         if self.empty:
             raise IndexError("Queue is empty")
         else:
-            item = self.circularqueue[self.__front]
+            item = self.__queue[self.__front]
             self.__front = (self.__front + 1) % (self.__max_size + 1)
             return item
 
@@ -47,7 +49,7 @@ class CircularQueue(IQueue[T]):
 
     @property
     def front(self) -> T:
-        return self.circularqueue[self.__front]
+        return self.__queue[self.__front]
 
     @property
     def full(self) -> bool:
@@ -73,10 +75,13 @@ class CircularQueue(IQueue[T]):
         if not len(self) == len(other):
             return False
         else:
-            equality = []
-            for i in range(len(self)):
-                equality.append((self.circularqueue[((self.__front + i) % (self.__max_size + 1) )]) == (other.circularqueue[(other.front_pointer + i) % (other.maxsize + 1)]))
-            return all(equality)
+            s_queue = deepcopy(self)
+            o_queue = deepcopy(other)
+            eq = []
+            for _ in range(len(self)):
+                eq.append(s_queue.dequeue() == o_queue.dequeue())
+            return all(eq)
+
 
 
     
@@ -84,8 +89,8 @@ class CircularQueue(IQueue[T]):
         return (self.__rear - self.__front + self.__max_size + 1) % (self.__max_size + 1)
 
     def __str__(self) -> str:
-        return str(self.circularqueue)
+        return str(self.__queue)
 
     def __repr__(self) -> str:
-        return f'ArrayQueue({repr(self.circularqueue)})'
+        return f'ArrayQueue({repr(self.__queue)})'
                                   

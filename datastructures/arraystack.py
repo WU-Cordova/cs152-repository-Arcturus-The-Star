@@ -2,6 +2,7 @@ import os
 
 from datastructures.array import Array, T
 from datastructures.istack import IStack
+from copy import deepcopy
 
 class ArrayStack(IStack[T]):
     ''' ArrayStack class that implements the IStack interface. The ArrayStack is a 
@@ -15,7 +16,7 @@ class ArrayStack(IStack[T]):
                 data_type: type -- The data type of the stack.       
         '''
         self.__data_type = data_type
-        self.stack = Array([self.__data_type() for i in range(max_size)], data_type)
+        self.__stack = Array([self.__data_type() for _ in range(max_size)], data_type)
         self.__max_size = max_size
         self.__top = -1
 
@@ -26,13 +27,13 @@ class ArrayStack(IStack[T]):
             raise TypeError("Item type is invalid")
         else:
             self.__top += 1
-            self.stack[self.__top] = item
+            self.__stack[self.__top] = item
 
     def pop(self) -> T:
         if self.__top == -1:
             raise IndexError("Stack is empty")
         else:
-            item = self.stack[self.__top]
+            item = self.__stack[self.__top]
             self.__top -= 1
             return item
 
@@ -40,7 +41,7 @@ class ArrayStack(IStack[T]):
        self.__top = -1
     @property
     def peek(self) -> T:
-       return self.stack[self.__top]
+       return self.__stack[self.__top]
 
     @property
     def maxsize(self) -> int:
@@ -65,16 +66,25 @@ class ArrayStack(IStack[T]):
         return self.__top == -1
 
     def __eq__(self, other: object) -> bool:
-       return self.stack == other.stack
+        if not len(self) == len(other):
+            return False
+        else:
+            s_stack = deepcopy(self)
+            o_stack = deepcopy(other)
+            eq = []
+            for _ in range(len(self)):
+                eq.append(s_stack.pop() == o_stack.pop())
+            return all(eq)
+
 
     def __len__(self) -> int:
        return self.__top + 1
     
     def __contains__(self, item: T) -> bool:
-       return item in self.stack
+       return item in self.__stack
 
     def __str__(self) -> str:
-        return str([self.stack[i] for i in range(self.__top + 1)])
+        return str([self.__stack[i] for i in range(self.__top + 1)])
     
     def __repr__(self) -> str:
         return f"ArrayStack({self.maxsize}): items: {str(self)}"
