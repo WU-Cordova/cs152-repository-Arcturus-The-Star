@@ -1,5 +1,4 @@
-from typing import Any
-
+from __future__ import annotations
 from datastructures.array import Array
 from datastructures.iqueue import IQueue, T
 from copy import deepcopy
@@ -14,12 +13,12 @@ class CircularQueue(IQueue[T]):
     """
 
     def __init__(self, maxsize: int = 0, data_type=object) -> None:
-        ''' Initializes the CircularQueue object with a maxsize and data_type.
+        """ Initializes the CircularQueue object with a maxsize and data_type.
 
             Arguments:
                 maxsize: The maximum size of the queue
                 data_type: The type of the elements in the queue
-        '''
+        """
         self.__data_type = data_type
         self.__max_size = maxsize
         self.__queue = Array([self.__data_type() for _ in range(self.__max_size + 1)])
@@ -73,7 +72,14 @@ class CircularQueue(IQueue[T]):
     def rear_pointer(self):
         return self.__rear
 
-    def __eq__(self, other: object) -> bool:
+    @property
+    def back(self):
+        if self.empty:
+            raise IndexError("Queue underflow")
+        else:
+            return self.__queue[(self.__rear - 1) % (self.__max_size + 1)]
+
+    def __eq__(self, other: CircularQueue) -> bool:
         if not len(self) == len(other):
             return False
         else:
@@ -81,6 +87,9 @@ class CircularQueue(IQueue[T]):
 
     def __len__(self) -> int:
         return (self.__rear - self.__front + self.__max_size + 1) % (self.__max_size + 1)
+
+    def __contains__(self, item):
+        return item in [self.__queue[(self.__front + j) % (self.__max_size + 1)] for j in range(len(self))]
 
     def __str__(self) -> str:
         return str(self.__queue)

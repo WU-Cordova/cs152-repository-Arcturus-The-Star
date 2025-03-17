@@ -90,7 +90,7 @@ class IQueue(Generic[T]):
         ...
 
     @abstractmethod
-    def is_empty(self) -> bool:
+    def empty(self) -> bool:
         """ Returns True if the queue is empty, False otherwise
 
             Returns:

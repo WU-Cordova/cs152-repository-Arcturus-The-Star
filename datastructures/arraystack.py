@@ -1,20 +1,20 @@
+from __future__ import annotations
 import os
-
 from datastructures.array import Array, T
 from datastructures.istack import IStack
 from copy import deepcopy
 
 class ArrayStack(IStack[T]):
-    ''' ArrayStack class that implements the IStack interface. The ArrayStack is a 
-        fixed-size stack that uses an Array to store the items.'''
+    """ ArrayStack class that implements the IStack interface. The ArrayStack is a
+        fixed-size stack that uses an Array to store the items."""
     
     def __init__(self, max_size: int = 0, data_type=object) -> None:
-        ''' Constructor to initialize the stack 
-        
-            Arguments: 
-                max_size: int -- The maximum size of the stack. 
-                data_type: type -- The data type of the stack.       
-        '''
+        """ Constructor to initialize the stack
+
+            Arguments:
+                max_size: int -- The maximum size of the stack.
+                data_type: type -- The data type of the stack.
+        """
         self.__data_type = data_type
         self.__stack = Array([self.__data_type() for _ in range(max_size)], data_type)
         self.__max_size = max_size
@@ -22,7 +22,7 @@ class ArrayStack(IStack[T]):
 
     def push(self, item: T) -> None:
         if self.__top == self.__max_size - 1:
-            raise OverflowError("Stack overflow")
+            raise IndexError("Stack overflow")
         elif not isinstance(item, self.__data_type):
             raise TypeError("Item type is invalid")
         else:
@@ -45,27 +45,27 @@ class ArrayStack(IStack[T]):
 
     @property
     def maxsize(self) -> int:
-        ''' Returns the maximum size of the stack. 
-        
+        """ Returns the maximum size of the stack.
+
             Returns:
                 int: The maximum size of the stack.
-        '''
+        """
         return self.__max_size
     
     @property
     def full(self) -> bool:
-        ''' Returns True if the stack is full, False otherwise. 
-        
+        """ Returns True if the stack is full, False otherwise.
+
             Returns:
                 bool: True if the stack is full, False otherwise.
-        '''
+        """
         return self.__top == self.__max_size - 1
 
     @property
     def empty(self) -> bool:
         return self.__top == -1
 
-    def __eq__(self, other: object) -> bool:
+    def __eq__(self, other: ArrayStack) -> bool:
         if not len(self) == len(other):
             return False
         else:
