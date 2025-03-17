@@ -30,14 +30,14 @@ class CircularQueue(IQueue[T]):
         if not isinstance(item, self.__data_type):
             raise TypeError("Item is of invalid type")
         elif self.full:
-            raise IndexError("Queue is full")
+            raise OverflowError("Queue overflow")
         else:
             self.__queue[self.__rear] = item
             self.__rear = (self.__rear + 1) % (self.__max_size + 1)
 
     def dequeue(self) -> T:
         if self.empty:
-            raise IndexError("Queue is empty")
+            raise IndexError("Queue underflow")
         else:
             item = self.__queue[self.__front]
             self.__front = (self.__front + 1) % (self.__max_size + 1)
@@ -49,6 +49,8 @@ class CircularQueue(IQueue[T]):
 
     @property
     def front(self) -> T:
+        if self.empty:
+            raise IndexError("Queue underflow")
         return self.__queue[self.__front]
 
     @property

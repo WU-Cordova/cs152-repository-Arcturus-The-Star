@@ -22,7 +22,7 @@ class ArrayStack(IStack[T]):
 
     def push(self, item: T) -> None:
         if self.__top == self.__max_size - 1:
-            raise IndexError("Stack is full")
+            raise OverflowError("Stack overflow")
         elif not isinstance(item, self.__data_type):
             raise TypeError("Item type is invalid")
         else:
@@ -31,7 +31,7 @@ class ArrayStack(IStack[T]):
 
     def pop(self) -> T:
         if self.__top == -1:
-            raise IndexError("Stack is empty")
+            raise IndexError("Stack underflow")
         else:
             item = self.__stack[self.__top]
             self.__top -= 1
