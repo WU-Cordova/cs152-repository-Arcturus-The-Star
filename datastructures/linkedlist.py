@@ -14,18 +14,36 @@ class LinkedList[T](ILinkedList[T]):
         next: Optional[LinkedList.Node] = None
         previous: Optional[LinkedList.Node] = None
 
+        def __eq__(self, other):
+            return self == other if isinstance(other, LinkedList.Node) else self.data == other
+
     def __init__(self, data_type: type = object) -> None:
-        raise NotImplementedError("LinkedList.__init__ is not implemented")
+        self.__data_type = data_type
+        self.__head = None
+        self.__tail = None
+        self.__count = 0
 
     @staticmethod
     def from_sequence(sequence: Sequence[T], data_type: type=object) -> LinkedList[T]:
         raise NotImplementedError("LinkedList.from_sequence is not implemented")
 
     def append(self, item: T) -> None:
-        raise NotImplementedError("LinkedList.append is not implemented")
+        if self.empty:
+            self.__head = self.__tail = self.Node(item)
+        else:
+            new_node = self.Node(item, previous=self.__tail)
+            self.__tail.next = new_node
+            self.__tail = new_node
+        self.__count += 1
 
     def prepend(self, item: T) -> None:
-        raise NotImplementedError("LinkedList.prepend is not implemented")
+        if self.empty:
+            self.__head = self.__tail = self.Node(item)
+        else:
+            new_node = self.Node(item, next=self.__head)
+            self.__head.previous = new_node
+            self.__head = new_node
+        self.__count += 1
 
     def insert_before(self, target: T, item: T) -> None:
         raise NotImplementedError("LinkedList.insert_before is not implemented")
@@ -47,18 +65,24 @@ class LinkedList[T](ILinkedList[T]):
 
     @property
     def front(self) -> T:
-        raise NotImplementedError("LinkedList.front is not implemented")
+        if self.empty:
+            raise IndexError("List is empty")
+        else:
+            return self.__head
 
     @property
     def back(self) -> T:
-        raise NotImplementedError("LinkedList.back is not implemented")
+        if self.empty:
+            raise IndexError("List is empty")
+        else:
+            return self.__tail
 
     @property
     def empty(self) -> bool:
-        raise NotImplementedError("LinkedList.empty is not implemented")
+        return False if self.__head or self.__tail else True
 
     def __len__(self) -> int:
-        raise NotImplementedError("LinkedList.__len__ is not implemented")
+        return self.__count
 
     def clear(self) -> None:
         raise NotImplementedError("LinkedList.clear is not implemented")
@@ -88,11 +112,11 @@ class LinkedList[T](ILinkedList[T]):
 
     def __repr__(self) -> str:
         items = []
-        current = self.head
+        current = self.__head
         while current:
             items.append(repr(current.data))
             current = current.next
-        return f"LinkedList({' <-> '.join(items)}) Count: {self.count}"
+        return f"LinkedList({' <-> '.join(items)}) Count: {self.__count}"
 
 
 if __name__ == '__main__':
