@@ -422,7 +422,7 @@ class ILinkedList[T](abc.ABC):
     def __next__(self) -> T:
 
         ''' Returns the next item in the list
-        
+
             Examples:
                 >>> linked_list = LinkedList(data_type=str)
                 >>> linked_list.append('dog')
@@ -439,7 +439,7 @@ class ILinkedList[T](abc.ABC):
                 Traceback (most recent call last):
                     ...
                 StopIteration
-                
+
 
             Returns:
                 The next item in the list
