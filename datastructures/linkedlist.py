@@ -190,10 +190,10 @@ class LinkedList[T](ILinkedList[T]):
         raise NotImplementedError("LinkedList.__next__ is not implemented")
     
     def __reversed__(self) -> ILinkedList[T]:
-        seq = []
+        link = LinkedList(self.__data_type)
         for i in self:
-            seq.insert(0, i.data)
-        return LinkedList.from_sequence(seq, self.__data_type)
+            link.prepend(i.data)
+        return link
 
     def __eq__(self, other: LinkedList) -> bool:
         return (len(self) == len(other)) and all([(i.data == j.data) and (i.previous.data == j.previous.data if i.previous else True) and (i.next.data == j.next.data if i.next else True) for i,j in zip(self, other)])
