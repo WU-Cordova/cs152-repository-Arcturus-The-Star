@@ -65,14 +65,14 @@ class LinkedList[T](ILinkedList[T]):
         else:
             for i in self:
                 if i == target:
-                    targetnode = i
+                    target_node = i
                     break
-            if targetnode == self.__head:
+            if target_node == self.__head:
                 self.prepend(item)
             else:
-                new_node = self.Node(item, targetnode, targetnode.previous)
-                targetnode.previous.next = new_node
-                targetnode.previous = new_node
+                new_node = self.Node(item, target_node, target_node.previous)
+                target_node.previous.next = new_node
+                target_node.previous = new_node
             self.__count += 1
 
     def insert_after(self, target: T, item: T) -> None:
@@ -85,14 +85,14 @@ class LinkedList[T](ILinkedList[T]):
         else:
             for i in self:
                 if i == target:
-                    targetnode = i
+                    target_node = i
                     break
-            if targetnode == self.__tail:
+            if target_node == self.__tail:
                 self.append(item)
             else:
-                new_node = self.Node(item, targetnode.next, targetnode)
-                targetnode.next.previous = new_node
-                targetnode.next = new_node
+                new_node = self.Node(item, target_node.next, target_node)
+                target_node.next.previous = new_node
+                target_node.next = new_node
             self.__count += 1
 
 
