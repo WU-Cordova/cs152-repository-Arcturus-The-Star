@@ -18,7 +18,7 @@ class LinkedList[T](ILinkedList[T]):
             return str(self.data)
 
         def __eq__(self, other):
-            return (id(self) == id(other)) if isinstance(other, LinkedList.Node) else self.data == other
+            return self.data == other.data if isinstance(other, LinkedList.Node) else self.data == other
 
     def __init__(self, data_type: type = object) -> None:
         self.__data_type = data_type
@@ -60,13 +60,8 @@ class LinkedList[T](ILinkedList[T]):
             raise TypeError("Item is of invalid type")
         elif not isinstance(target, self.__data_type):
             raise TypeError("Target is of invalid type")
-        elif target not in self:
-            raise ValueError("Target is not present")
         else:
-            for i in self:
-                if i == target:
-                    target_node = i
-                    break
+            target_node = self.find(target)
             if target_node == self.__head:
                 self.prepend(item)
             else:
@@ -83,10 +78,7 @@ class LinkedList[T](ILinkedList[T]):
         elif target not in self:
             raise ValueError("Target is not present")
         else:
-            for i in self:
-                if i == target:
-                    target_node = i
-                    break
+            target_node = self.find(target)
             if target_node == self.__tail:
                 self.append(item)
             else:
@@ -98,19 +90,19 @@ class LinkedList[T](ILinkedList[T]):
 
     def remove(self, item: T) -> None:
         if not isinstance(item, self.__data_type):
-            raise TypeError("Item is of invalid type")
-        elif item not in self:
+            if isinstance(item, LinkedList.Node):
+                item = item.data
+            else:
+                raise TypeError("Item is of invalid type")
+        if item not in self:
             raise ValueError("Item is not present")
         else:
-            for i in self:
-                if i == item:
-                    target = i
-                    break
+            target = self.find(item)
             if len(self) == 1:
                 self.clear()
-            elif target == self.__head:
+            elif not target.previous:
                 self.pop_front()
-            elif target == self.__tail:
+            elif not target.next:
                 self.pop()
             else:
                 target.next.previous = target.previous
@@ -124,9 +116,11 @@ class LinkedList[T](ILinkedList[T]):
         elif item not in self:
             raise ValueError("Item is not present")
         else:
-            for i in self:
-                if i == item:
-                    self.remove(i.data)
+            travel = self.__head
+            while travel:
+                if travel == item:
+                    self.remove(travel)
+                travel = travel.next
 
     def pop(self) -> T:
         if self.empty:
@@ -173,6 +167,23 @@ class LinkedList[T](ILinkedList[T]):
         self.__head = self.__tail = None
         self.__count = 0
 
+    def find(self, target:T) ->LinkedList.Node:
+        """
+        Finds the first instance of a node with the target data
+        :param target: The desired data
+        :return: The first instance of the data
+        """
+        if not isinstance(target, self.__data_type):
+            raise TypeError("Target is of invalid type")
+        else:
+            travel = self.__head
+            while travel:
+                if travel == target:
+                    return travel
+                else:
+                    travel = travel.next
+            raise ValueError("Target is not present")
+
     def __contains__(self, item: T) -> bool:
         for i in self:
             if item == i:
@@ -196,7 +207,7 @@ class LinkedList[T](ILinkedList[T]):
         return link
 
     def __eq__(self, other: LinkedList) -> bool:
-        return (len(self) == len(other)) and all([(i.data == j.data) and (i.previous.data == j.previous.data if i.previous else True) and (i.next.data == j.next.data if i.next else True) for i,j in zip(self, other)])
+        return (len(self) == len(other)) and all([(i == j) and (i.previous == j.previous if i.previous else True) and (i.next == j.next if i.next else True) for i,j in zip(self, other)])
 
     def __str__(self) -> str:
         items = []
