@@ -12,7 +12,10 @@ class Bag(IBag[T]):
         Returns:
             None
         """
-        items = list(items[0])
+        if len(items) > 0:
+            items = list(items[0])
+        else:
+            items = list(items)
         self.__bag = {}
         if items:
             for i in items:
@@ -110,3 +113,9 @@ class Bag(IBag[T]):
         """
         for i in self.distinct_items():
             self.remove(i)
+
+    def __str__(self):
+        return f"{{{", ".join([str(i) + ":" + str(self.count(i)) for i in self.distinct_items()])}}}"
+
+    def __repr__(self):
+        return f"Bag {str(self)}, length {len(self)}"
