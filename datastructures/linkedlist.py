@@ -89,15 +89,15 @@ class LinkedList[T](ILinkedList[T]):
 
 
     def remove(self, item: T) -> None:
-        if not isinstance(item, self.__data_type):
-            if isinstance(item, LinkedList.Node):
-                item = item.data
-            else:
-                raise TypeError("Item is of invalid type")
-        if item not in self:
+        if not (node := isinstance(item, LinkedList.Node)) and not isinstance(item, self.__data_type):
+            raise TypeError("Item is of invalid type")
+        elif item not in self:
             raise ValueError("Item is not present")
         else:
-            target = self.find(item)
+            if node:
+                target = item
+            else:
+                target = self.find(item)
             if len(self) == 1:
                 self.clear()
             elif not target.previous:
@@ -108,6 +108,7 @@ class LinkedList[T](ILinkedList[T]):
                 target.next.previous = target.previous
                 target.previous.next = target.next
                 self.__count -= 1
+
 
 
     def remove_all(self, item: T) -> None:
@@ -126,25 +127,29 @@ class LinkedList[T](ILinkedList[T]):
         if self.empty:
             raise IndexError("List is empty")
         elif len(self) == 1:
+            data = self.__tail.data
             self.clear()
+            return data
         else:
             node = self.__tail
             self.__tail = node.previous
             self.__tail.next = None
             self.__count -= 1
-            return node
+            return node.data
 
     def pop_front(self) -> T:
         if self.empty:
             raise IndexError("List is empty")
         elif len(self) == 1:
+            data = self.__tail.data
             self.clear()
+            return data
         else:
             node = self.__head
             self.__head = node.next
-            self.__head.next = None
+            self.__head.previous = None
             self.__count -= 1
-            return node
+            return node.data
 
     @property
     def front(self) -> T:
@@ -211,7 +216,7 @@ class LinkedList[T](ILinkedList[T]):
         return link
 
     def __eq__(self, other: LinkedList) -> bool:
-        return (len(self) == len(other)) and all([(i == j) and (i.previous == j.previous if i.previous else True) and (i.next == j.next if i.next else True) for i,j in zip(self, other)])
+        return (len(self) == len(other)) and all([(i == j) for i,j in zip(self, other)])
 
     def __str__(self) -> str:
         items = []
