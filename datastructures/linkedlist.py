@@ -198,7 +198,7 @@ class LinkedList[T](ILinkedList[T]):
             yield nd
 
     def __next__(self) -> T:
-        raise NotImplementedError("LinkedList.__next__ is not implemented")
+        pass
     
     def __reversed__(self) -> ILinkedList[T]:
         link = LinkedList(self.__data_type)
