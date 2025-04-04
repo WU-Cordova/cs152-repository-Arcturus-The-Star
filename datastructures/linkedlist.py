@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 import os
-from typing import Optional, Sequence
+from typing import Optional, Sequence, Iterator
 from datastructures.ilinkedlist import ILinkedList, T
 
 
@@ -125,6 +125,8 @@ class LinkedList[T](ILinkedList[T]):
     def pop(self) -> T:
         if self.empty:
             raise IndexError("List is empty")
+        elif len(self) == 1:
+            self.clear()
         else:
             node = self.__tail
             self.__tail = node.previous
@@ -135,6 +137,8 @@ class LinkedList[T](ILinkedList[T]):
     def pop_front(self) -> T:
         if self.empty:
             raise IndexError("List is empty")
+        elif len(self) == 1:
+            self.clear()
         else:
             node = self.__head
             self.__head = node.next
@@ -190,9 +194,9 @@ class LinkedList[T](ILinkedList[T]):
                 return True
         return False
 
-    def __iter__(self) -> ILinkedList[T]:
+    def __iter__(self) -> Iterator[T]:
         node = self.__head
-        for i in range(len(self)):
+        while node:
             nd = node
             node = nd.next
             yield nd
