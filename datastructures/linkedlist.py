@@ -212,7 +212,7 @@ class LinkedList[T](ILinkedList[T]):
     def __reversed__(self) -> ILinkedList[T]:
         link = LinkedList(self.__data_type)
         for i in self:
-            link.prepend(i.data)
+            link.prepend(i)
         return link
 
     def __eq__(self, other: LinkedList) -> bool:
