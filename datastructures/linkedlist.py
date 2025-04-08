@@ -204,7 +204,7 @@ class LinkedList[T](ILinkedList[T]):
         while node:
             nd = node
             node = nd.next
-            yield nd
+            yield nd.data
 
     def __next__(self) -> T:
         pass
