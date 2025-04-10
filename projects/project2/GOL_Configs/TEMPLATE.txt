@@ -1,0 +1,9 @@
+ROWS:3
+COLS:5
+GRID:
+ooooo
+ooooo
+ooooo
+
+
+o is dead cell and x is living (don't include this in any other configs)
