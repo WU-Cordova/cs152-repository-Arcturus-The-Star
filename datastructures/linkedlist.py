@@ -21,10 +21,10 @@ class LinkedList[T](ILinkedList[T]):
             return self.data == other.data if isinstance(other, LinkedList.Node) else self.data == other
 
     def __init__(self, data_type: type = object) -> None:
-        self.__data_type = data_type
-        self.__head = None
-        self.__tail = None
-        self.__count = 0
+        self.__data_type:type = data_type
+        self.__head:LinkedList.Node | None = None
+        self.__tail:LinkedList.Node | None = None
+        self.__count:int = 0
 
     @staticmethod
     def from_sequence(sequence: Sequence[T], data_type: type=object) -> LinkedList[T]:
@@ -233,8 +233,3 @@ class LinkedList[T](ILinkedList[T]):
             items.append(repr(current.data))
             current = current.next
         return f"LinkedList({' <-> '.join(items)}) Count: {self.__count}"
-
-
-if __name__ == '__main__':
-    filename = os.path.basename(__file__)
-    thang = LinkedList.from_sequence([1,2,3], int)
