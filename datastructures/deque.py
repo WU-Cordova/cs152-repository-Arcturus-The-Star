@@ -1,3 +1,6 @@
+from __future__ import annotations
+
+import copy
 import os
 from datastructures.iqueue import IQueue
 from datastructures.linkedlist import LinkedList
@@ -17,7 +20,8 @@ class Deque[T](IQueue[T]):
         Args:
             - data_type (type): The type of data the deque will hold.
         """
-        raise NotImplementedError("Deque initialization is not implemented.")
+        self.__list = LinkedList(data_type)
+        self.__data_type = data_type
 
     def enqueue(self, item: T) -> None:
         """
@@ -29,7 +33,10 @@ class Deque[T](IQueue[T]):
         Raises:
             - TypeError: If the item is not of the correct type.
         """
-        raise NotImplementedError("Method to add an item to the back of the deque is not implemented.")
+        if not isinstance(item, self.__data_type):
+            raise TypeError("Item is not of the correct type")
+        else:
+            self.__list.append(item)
 
     def dequeue(self) -> T:
         """
@@ -41,7 +48,10 @@ class Deque[T](IQueue[T]):
         Raises:
             - IndexError: If the deque is empty.
         """
-        raise NotImplementedError("Method to remove an item from the front of the deque is not implemented.")
+        if self.empty():
+            raise IndexError("Deque is empty")
+        else:
+            return self.__list.pop_front()
 
     def enqueue_front(self, item: T) -> None:
         """
@@ -53,7 +63,10 @@ class Deque[T](IQueue[T]):
         Raises:
             - TypeError: If the item is not of the correct type.
         """
-        raise NotImplementedError("Method to add an item to the front of the deque is not implemented.")
+        if not isinstance(item, self.__data_type):
+            raise TypeError("Item is not of the correct type")
+        else:
+            self.__list.prepend(item)
 
     def dequeue_back(self) -> T:
         """
@@ -65,7 +78,10 @@ class Deque[T](IQueue[T]):
         Raises:
             - IndexError: If the deque is empty.
         """
-        raise NotImplementedError("Method to remove an item from the back of the deque is not implemented.")
+        if self.empty():
+            raise IndexError("Deque is empty")
+        else:
+            return self.__list.pop()
 
     def front(self) -> T:
         """
@@ -77,7 +93,10 @@ class Deque[T](IQueue[T]):
         Raises:
             - IndexError: If the deque is empty.
         """
-        raise NotImplementedError("Method to get the front item of the deque is not implemented.")
+        if self.empty():
+            raise IndexError("Deque is empty")
+        else:
+            return self.__list.front
 
     def back(self) -> T:
         """
@@ -89,7 +108,10 @@ class Deque[T](IQueue[T]):
         Raises:
             - IndexError: If the deque is empty.
         """
-        raise NotImplementedError("Method to get the back item of the deque is not implemented.")
+        if self.empty():
+            raise IndexError("Deque is empty")
+        else:
+            return self.__list.back
 
     def empty(self) -> bool:
         """
@@ -98,7 +120,7 @@ class Deque[T](IQueue[T]):
         Returns:
             - bool: True if the deque is empty, False otherwise.
         """
-        raise NotImplementedError("Method to check if the deque is empty is not implemented.")
+        return self.__list.empty
 
     def __len__(self) -> int:
         """
@@ -107,7 +129,7 @@ class Deque[T](IQueue[T]):
         Returns:
             - int: The number of items in the deque.
         """
-        raise NotImplementedError("Method to get the length of the deque is not implemented.")
+        return len(self.__list)
     
     def __contains__(self, item: T) -> bool:
         """
@@ -119,9 +141,9 @@ class Deque[T](IQueue[T]):
         Returns:
             - bool: True if the item exists in the deque, False otherwise.
         """
-        raise NotImplementedError("Method to check if an item exists in the deque is not implemented.")
+        return item in self.__list
     
-    def __eq__(self, other) -> bool:
+    def __eq__(self, other:Deque) -> bool:
         """
         Compares two deques for equality.
 
@@ -131,13 +153,23 @@ class Deque[T](IQueue[T]):
         Returns:
             - bool: True if the deques are equal, False otherwise.
         """
-        raise NotImplementedError("Method to compare two deques is not implemented.")
-    
+        if len(self) != len(other):
+            return False
+        elif not isinstance(other, Deque):
+            return False
+        else:
+            scopy = copy.deepcopy(self)
+            ocopy = copy.deepcopy(other)
+            for _ in range(len(self)):
+                if scopy.dequeue() != ocopy.dequeue():
+                    return False
+            return True
+
     def clear(self):
         """
         Clears all items from the deque.
         """
-        raise NotImplementedError("Method to clear the deque is not implemented.")
+        self.__list.clear()
 
     def __str__(self) -> str:
         """
@@ -146,7 +178,7 @@ class Deque[T](IQueue[T]):
         Returns:
             - str: A string representation of the deque.
         """
-        raise NotImplementedError("Method to get the string representation of the deque is not implemented.")
+        return str([i for i in self.__list])
     
     def __repr__(self) -> str:
         """
@@ -155,7 +187,7 @@ class Deque[T](IQueue[T]):
         Returns:
             - str: A detailed string representation of the deque.
         """
-        raise NotImplementedError("Method to get the detailed string representation of the deque is not implemented.")
+        return f"Deque {str(self)}, data type {self.__data_type}"
 
 
 if __name__ == '__main__':

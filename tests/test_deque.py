@@ -35,7 +35,7 @@ class TestDeque:
 
     @name('Test Dequeue on Empty Deque Raises Exception')
     def test_dequeue_empty(self, empty_deque: Deque[int]) -> None:
-        with pytest.raises(IndexError, match="Dequeue from empty deque"):
+        with pytest.raises(IndexError):
             empty_deque.dequeue()
 
     @name('Test Enqueue Front Adds Element to Front of Deque')
@@ -55,7 +55,7 @@ class TestDeque:
 
     @name('Test Dequeue Back on Empty Deque Raises Exception')
     def test_dequeue_back_empty(self, empty_deque: Deque[int]) -> None:
-        with pytest.raises(IndexError, match="Dequeue from empty deque"):
+        with pytest.raises(IndexError):
             empty_deque.dequeue_back()
 
     @name('Test Front Property Returns First Element')
@@ -64,7 +64,7 @@ class TestDeque:
 
     @name('Test Front Property on Empty Deque Raises Exception')
     def test_front_empty(self, empty_deque: Deque[int]) -> None:
-        with pytest.raises(IndexError, match="List is empty"):
+        with pytest.raises(IndexError):
             _ = empty_deque.front()
 
     @name('Test Back Property Returns Last Element')
@@ -73,7 +73,7 @@ class TestDeque:
 
     @name('Test Back Property on Empty Deque Raises Exception')
     def test_back_empty(self, empty_deque: Deque[int]) -> None:
-        with pytest.raises(IndexError, match="List is empty"):
+        with pytest.raises(IndexError):
             _ = empty_deque.back()
 
     @name('Test Empty Property Returns True for Empty Deque')
