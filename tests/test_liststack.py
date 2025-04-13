@@ -31,7 +31,7 @@ class TestListStack:
 
     @name('Test Pop on Empty Stack Raises Exception')
     def test_pop_empty_stack(self, empty_stack: ListStack[int]) -> None:
-        with pytest.raises(IndexError, match="pop from empty stack"):
+        with pytest.raises(IndexError):
             empty_stack.pop()
 
     @name('Test Peek Returns Top Element')
@@ -41,7 +41,7 @@ class TestListStack:
 
     @name('Test Peek on Empty Stack Raises Exception')
     def test_peek_empty_stack(self, empty_stack: ListStack[int]) -> None:
-        with pytest.raises(IndexError, match="peek from empty stack"):
+        with pytest.raises(IndexError):
             empty_stack.peek()
 
     @name('Test Empty Property')

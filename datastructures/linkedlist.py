@@ -156,14 +156,14 @@ class LinkedList[T](ILinkedList[T]):
         if self.empty:
             raise IndexError("List is empty")
         else:
-            return self.__head
+            return self.__head.data
 
     @property
     def back(self) -> T:
         if self.empty:
             raise IndexError("List is empty")
         else:
-            return self.__tail
+            return self.__tail.data
 
     @property
     def empty(self) -> bool:
