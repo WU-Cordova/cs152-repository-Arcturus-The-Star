@@ -4,13 +4,7 @@ from dataclasses import dataclass
 class Drink:
     name:str
     price:float
-    size:int=0
+    large_constant:float = 1.10
 
-    def price_from_size(self):
-        match self.size:
-            case 0:
-                self.price = self.price
-            case 1:
-                self.price *= 1.10
-            case _:
-                raise ValueError("Size is invalid")
+    def __str__(self):
+        return f"{self.name}- ${str(self.price)} small, ${str(round(self.price * self.large_constant, 2))} large"
