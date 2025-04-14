@@ -75,6 +75,7 @@ class BistroSystem:
             while i := input("1. Confirm order\n2. Start over\n>"):
                 match i.strip():
                     case "1":
+                        self.__open_orders.enqueue(current)
                         order = False
                         break
                     case "2":
