@@ -40,8 +40,47 @@ class BistroSystem:
         input("Press enter to return\n")
 
     def __new_order(self):
-        while item := input("Enter the name of the desired drink\n>"):
-            pass
+        order = True
+        while order:
+            current = CustomerOrder(Array())
+            cont = True
+            while cont :
+                item = input("Enter the name of the desired drink\n>")
+                if item in self.__menu:
+                    while size := input("1. Small\n2. Large\n>"):
+                        match size.strip():
+                            case "1":
+                                size = "small"
+                                break
+                            case "2":
+                                size = "large"
+                                break
+                            case _:
+                                print("Invalid input, please try again")
+                    custom = input("Enter any other customization\n>")
+                    current.order.append(OrderItem(self.__menu[item], size, custom))
+                    while i := input("1. Add more items\n2. Continue to name selection\n>"):
+                        match i.strip().lower():
+                            case "1" | "add":
+                                break
+                            case "2" | "continue":
+                                cont = False
+                                break
+                            case _:
+                                print("Input not recognized")
+                else:
+                    print("Invalid item name, please try again")
+            current.name = input("Enter the name of the customer\n>")
+            print(current)
+            while i := input("1. Confirm order\n2. Start over\n>"):
+                match i.strip():
+                    case "1":
+                        order = False
+                        break
+                    case "2":
+                        break
+                    case _:
+                        print("Input not recognized, please try again")
 
 
 

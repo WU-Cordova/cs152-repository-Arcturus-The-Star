@@ -67,7 +67,7 @@ class Array(IArray[T]):
             self.__items[index] = item
 
     def append(self, data: T) -> None:
-        if type(data) != self.__data_type:
+        if not isinstance(data, self.__data_type):
             raise TypeError(f"This Array has a data type of {self.__data_type} and does not accept other types")
         self.__grow()
         self.__items[self.__item_count] = data

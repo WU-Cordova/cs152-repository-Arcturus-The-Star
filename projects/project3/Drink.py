@@ -2,8 +2,8 @@ from dataclasses import dataclass
 
 @dataclass
 class Drink:
-    name:str
-    price:float
+    name:str="Default"
+    price:float=1
     large_constant:float = 1.10
 
     def __str__(self):
