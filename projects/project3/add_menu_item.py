@@ -1,12 +1,18 @@
 import json
 
 def main():
-    menudict = json.load(menu := open("menu.json", "r"))
-    menu.close()
     while i := input("Welcome to the Bistro Menu Editor\n1. Add a new item\n2. Remove an old item\n3. Exit\n>"):
-        match i.strip():
-            case "1":
-                name = input("Enter the name of the new item\n>")
+        match i.strip().lower():
+            case "1" | "add":
+                menudict = json.load(menu := open("menu.json", "r"))
+                menu.close()
+                while True:
+                    name = input("Enter the name of the new item\n>")
+                    name = name.strip()
+                    if name in menudict or name == "cancel":
+                        print("Name is already in use, please try again")
+                    else:
+                        break
                 while True:
                     try:
                         price = float(input("Enter the price of the new item\n>"))
@@ -14,15 +20,19 @@ def main():
                     except ValueError:
                         print("Please input a valid price")
                 add_item(name, price)
-            case "2":
-                print(f"Menu:\n{"\n".join([str(menudict[i]) for i in menudict])}")
-                while name := input("Enter the name of the item to remove\n>"):
+            case "2" | "remove":
+                menudict = json.load(menu := open("menu.json", "r"))
+                menu.close()
+                print(f"Menu:\n{"\n".join([i + ": " + str(menudict[i]) for i in menudict])}")
+                while name := input("Enter the name of the item to remove or cancel to leave\n>"):
                     if name in menudict:
                         remove_item(name)
                         break
+                    if name == "cancel":
+                        break
                     else:
                         print("Name not recognized, please try again")
-            case "3":
+            case "3" | "exit":
                 break
             case _:
                 print("Input not recognized, please try again\n\n")
@@ -35,8 +45,9 @@ def add_item(name:str, price:float):
     :return:
     """
     menu = json.load(file := open("menu.json", "r"))
+    file.close()
     menu[name] = price
-    json.dump(file, menu)
+    json.dump(menu, file := open("menu.json", "w"), indent=6)
     file.close()
 
 def remove_item(name:str):
@@ -45,9 +56,10 @@ def remove_item(name:str):
     :param name: The name of the item
     :return:
     """
-    menu = json.load(file := open("menu.json", "w"))
+    menu = json.load(file := open("menu.json", "r"))
+    file.close()
     del menu[name]
-    json.dump(file, menu)
+    json.dump(menu, file := open("menu.json", "w"), indent=6)
     file.close()
 
 

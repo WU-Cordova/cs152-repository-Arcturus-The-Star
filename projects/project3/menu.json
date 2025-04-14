@@ -1,17 +1,7 @@
 {
-      "Mocha":
-            7.5
-      ,
-      "Latte":
-            6.25
-      ,
-      "Espresso":
-            3.75
-      ,
-      "Americano":
-            5.25
-      ,
-      "Cappuccino":
-            5.75
-
+      "Mocha": 7.5,
+      "Latte": 6.25,
+      "Espresso": 3.75,
+      "Americano": 5.25,
+      "Cappuccino": 5.75
 }
