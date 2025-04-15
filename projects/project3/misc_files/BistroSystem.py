@@ -1,6 +1,6 @@
-from Drink import Drink
-from OrderItem import OrderItem
-from CustomerOrder import  CustomerOrder
+from .Drink import Drink
+from .OrderItem import OrderItem
+from .CustomerOrder import  CustomerOrder
 from datastructures.deque import Deque
 from datastructures.array import Array
 from datetime import datetime
@@ -11,7 +11,7 @@ class BistroSystem:
     def __init__(self):
         self.__open_orders:Deque = Deque(data_type=CustomerOrder)
         self.__closed_orders:Array = Array()
-        menu_load = json.load(menu := open("menu.json", "r"))
+        menu_load = json.load(menu := open("misc_files/menu.json", "r"))
         menu.close()
         self.__menu:dict = {i: Drink(name=i, price=menu_load[i]) for i in menu_load} # item name:item price
         self.__report_viewed:bool = False
@@ -172,8 +172,3 @@ class BistroSystem:
                     return
                 case _:
                     print("Input not recognized, please try again")
-
-
-if __name__ == "__main__":
-    bs = BistroSystem()
-    bs.start()

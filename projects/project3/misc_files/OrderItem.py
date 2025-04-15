@@ -1,4 +1,4 @@
-from Drink import Drink
+from .Drink import Drink
 
 
 class OrderItem:
