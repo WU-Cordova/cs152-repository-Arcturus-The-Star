@@ -97,7 +97,7 @@ class Array(IArray[T]):
         return isinstance(other, Array) and (len(self) == len(other)) and ([item for item in self] == [item for item in other])
     
     def __iter__(self) -> Iterator[T]:
-       return iter(self.__items[:self.__item_count + 1])
+       return iter(self.__items[:self.__item_count])
 
     def __reversed__(self) -> Iterator[T]:
         return iter(list(self.__items)[::-1])
