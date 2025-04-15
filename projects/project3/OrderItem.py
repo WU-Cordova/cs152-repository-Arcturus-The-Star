@@ -17,11 +17,11 @@ class OrderItem:
 
     @property
     def price(self) ->float:
-        return self.__price * self.drink.large_constant if self.size == "large" else self.__price
+        return round(self.__price * self.drink.large_constant, 2) if self.size == "large" else self.__price
 
     def __str__(self):
         if self.size == "large":
-            price = self.price * self.drink.large_constant
+            price = round(self.price * self.drink.large_constant, 2)
         else:
             price = self.price
         return f"{self.size.capitalize()} {self.drink.name}: ${price} - {self.customization}"

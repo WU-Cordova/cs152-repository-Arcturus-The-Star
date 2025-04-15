@@ -156,7 +156,9 @@ class BistroSystem:
             for item in order.order:
                 drink_totals[item.drink.name][0] += 1
                 drink_totals[item.drink.name][1] += item.price
-        print(f"Report for {date}:\n Drink - Total Sold - Total Revenue\n {"\n".join([f"{i.capitalize()} - {drink_totals[i][0]} - {drink_totals[i][1]}" for i in drink_totals])}")
+        for total in drink_totals:
+            drink_totals[total][1] = round(drink_totals[total][1], 2)
+        print(f"Report for {date}:\nDrink - Total Sold - Total Revenue\n{"\n".join([f"{i.capitalize()} - {drink_totals[i][0]} - {drink_totals[i][1]}" for i in drink_totals])}\nTotal revenue: ${str(round(sum([drink_totals[i][1] for i in drink_totals]), 2))}")
         while i := input("1. Save to file\n2. Return without saving\n>"):
             match i.strip().lower():
                 case "1" | "save":
