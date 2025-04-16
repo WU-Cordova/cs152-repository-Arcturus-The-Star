@@ -11,3 +11,5 @@ Important File Directory:
 * Reports/0_report_viewer.bat - Drag reports onto this to view them
 
 Any other files can probably be ignored. 
+
+When program.py is run, it should 

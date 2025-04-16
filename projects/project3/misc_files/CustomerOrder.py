@@ -1,6 +1,7 @@
 from .OrderItem import  OrderItem
 from dataclasses import dataclass
-from datastructures.array import Array
+from datastructures import array
+
 
 @dataclass
 class CustomerOrder:
@@ -8,7 +9,7 @@ class CustomerOrder:
     Stores the entire order for a customer.
     :param order: An array of the items in the order
     """
-    order:Array[OrderItem]
+    order:array.Array[OrderItem]
     name:str="Default"
     status:bool=False
 

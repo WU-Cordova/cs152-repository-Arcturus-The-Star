@@ -1,16 +1,17 @@
 from .Drink import Drink
 from .OrderItem import OrderItem
 from .CustomerOrder import  CustomerOrder
-from datastructures.deque import Deque
-from datastructures.array import Array
+from datastructures import deque
+from datastructures import array
 from datetime import datetime
 import json
 import copy
 
+
 class BistroSystem:
     def __init__(self):
-        self.__open_orders:Deque = Deque(data_type=CustomerOrder)
-        self.__closed_orders:Array = Array()
+        self.__open_orders:deque.Deque = deque.Deque(data_type=CustomerOrder)
+        self.__closed_orders:array.Array = array.Array()
         menu_load = json.load(menu := open("misc_files/menu.json", "r"))
         menu.close()
         self.__menu:dict = {i: Drink(name=i, price=menu_load[i]) for i in menu_load} # item name:item price
@@ -60,7 +61,7 @@ class BistroSystem:
         """
         order = True
         while order:
-            current = CustomerOrder(Array())
+            current = CustomerOrder(array.Array())
             cont = True
             while cont :
                 item = input("Enter the name of the desired drink\n>")
