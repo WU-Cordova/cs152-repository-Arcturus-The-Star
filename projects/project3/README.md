@@ -1,5 +1,5 @@
 # Bistro Ordering System
-Hello, and welcome to the Bistro Ordering System!
+Hello, and welcome to the Bistro Ordering System ReadMe!
 
 Requirements:
 * Pwinput (pip install pwinput)
@@ -13,12 +13,11 @@ The password input is finicky! Make sure you're using the vscode option to run t
 
 Any other files can probably be ignored. 
 
-To log into anything with login, use the username "admin" and the password "password123"
+To log into anything with a login, use the username "admin" and the password "password123"
 
 When program.py is run, it should bring up a login screen, and then a dashboard. Be careful to only run from an IDE, as the imports are far too messed up to work from the terminal (sorry, if I keep the mandated folder structure there's no way around it). The rest should be self-explanatory.
 
-Sample Run:
-
+### Sample Run:
 >Welcome to the Bistro Authentication System
 > 
 >Please log in
@@ -192,7 +191,7 @@ Sample Run:
 > 
 The menu editor, as the name implies, edits the menu.
 
-Sample run:
+## Sample run:
 >Welcome to the Bistro Authentication System
 > 
 >Please log in
@@ -258,7 +257,7 @@ Sample run:
 
 Drag report files (any .json file in the reports folder) onto 0_report_viewer.bat to view them.
 
-Sample run:
+## Sample run:
 
 >Report for 04-16-2025 at 14-23:
 > 
@@ -280,7 +279,7 @@ Sample run:
 
 The user management system does exactly what it says, use this to add or remove users.
 
-Sample run:
+## Sample run:
 
 >Welcome to the Bistro Authentication System
 > 
@@ -339,3 +338,11 @@ Sample run:
 * **Order Confirmation** - I used the string method of CustomerOrder to translate the stored data (order array and name) into a properly formatted order summary. This is for ease of simply printing the order object to the screen without having to create anything or store and update a confirmation value. The only trade-off for this method is that it requires re-calculating the total price each time the order is printed, which has a complexity of O(n).
 * **Open Orders** - I used a Deque to store the open orders. This is not due to the double-endedness but simply because it is not restricted in size like a CircularQueue. A queue is useful because a FIFO system for retrieving orders is ideal, the first order should be completed before others. Using a LinkedList based queue has the tradeoff of making lookup very expensive, but luckily lookup is not required of a queue so this is not important.
 * **Completed Orders** - I used a LinkedList to store completed orders. This is because I would like to store them in a resizable data structure (as to not take up unnecessary space) and iterate over them when compiling an end of day report. LinkedList has these features, and is relatively lightweight, so it seems ideal for this scenario. LinkedList has the advantage over Array by not being dependent on an outside library, and avoids the complexity of resizing.
+
+# Bugs / Limitations:
+
+The largest limitation of this program is the lack of security. Yes, it uses a cryptographically secure hash system with proper salting, but it's a limitation of storing the files locally that the login system can be easily bypassed. Other than that, the biggest limitation is the console interface versus a proper GUI, but this is unavoidable and outside the scope of the project. I have not encountered any bugs in the current version of the program.
+
+# What I Would Add:
+
+I feel as though I have run up to the ends of my knowledge, not time. There are many features (such as a GUI or hosting files on a server) that I am simply not capable of doing yet. 
