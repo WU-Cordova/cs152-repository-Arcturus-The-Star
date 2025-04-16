@@ -1,6 +1,6 @@
 from .OrderItem import  OrderItem
 from dataclasses import dataclass
-from datastructures import array
+from datastructures import linkedlist
 
 
 @dataclass
@@ -9,9 +9,8 @@ class CustomerOrder:
     Stores the entire order for a customer.
     :param order: An array of the items in the order
     """
-    order:array.Array[OrderItem]
+    order:linkedlist.LinkedList[OrderItem]
     name:str="Default"
-    status:bool=False
 
     def __str__(self):
         total_price = 0

@@ -2,7 +2,7 @@ from .Drink import Drink
 from .OrderItem import OrderItem
 from .CustomerOrder import  CustomerOrder
 from datastructures import deque
-from datastructures import array
+from datastructures import linkedlist
 from datetime import datetime
 import json
 import copy
@@ -11,7 +11,7 @@ import copy
 class BistroSystem:
     def __init__(self):
         self.__open_orders:deque.Deque = deque.Deque(data_type=CustomerOrder)
-        self.__closed_orders:array.Array = array.Array()
+        self.__closed_orders:linkedlist.LinkedList = linkedlist.LinkedList(data_type=CustomerOrder)
         menu_load = json.load(menu := open("misc_files/menu.json", "r"))
         menu.close()
         self.__menu:dict = {i: Drink(name=i, price=menu_load[i]) for i in menu_load} # item name:item price
@@ -22,7 +22,7 @@ class BistroSystem:
         Starts the Bistro Ordering System
         :return:
         """
-        print("Welcome to the Bistro Order System")
+        print("Welcome to the Bistro Ordering System")
         # Log in
         while True:
             print("Dashboard:\n\n1. Display Menu\n2. Take New Order\n3. View Open Orders\n4. Mark Next Order as Complete\n5. View End-of-Day Report\n6. Exit")
@@ -63,7 +63,7 @@ class BistroSystem:
         """
         order = True
         while order:
-            current = CustomerOrder(array.Array())
+            current = CustomerOrder(linkedlist.LinkedList())
             cont = True
             while cont :
                 item = input("Enter the name of the desired drink\n>")
@@ -113,7 +113,7 @@ class BistroSystem:
         input("Press enter to return\n")
 
     def __mark_next_complete(self):
-        while i := input(f"The next order is:\n {str(self.__open_orders.front())}\n1. Confirm completion\n2. Cancel and return\n>"):
+        while i := input(f"The next order is:\n{str(self.__open_orders.front())}\n1. Confirm completion\n2. Cancel and return\n>"):
             match i.strip().lower():
                 case "1" | "confirm":
                     self.__closed_orders.append(self.__open_orders.dequeue())

@@ -8,13 +8,13 @@ from misc_files.password_authenticate import authenticate
 def main():
     authenticate()
     print("Welcome to the Bistro User Management System")
-    while i := input("Dashboard:\n1. Add User\n2. Remove User\n3. Change Password\n4. Exit\n>"):
+    while i := input("Dashboard:\n1. Add User\n2. Remove User\n3. Exit\n>"):
         match i.strip().lower():
             case "1" | "add":
                 file = open("misc_files/passwords.json", "r")
                 passwords = json.load(file)
                 file.close()
-                while username := input("Adding New User:\nUsername:"):
+                while username := input("\nAdding New User:\nUsername:"):
                     if username in passwords:
                         print("Username already in use, please try again")
                     else:
@@ -27,11 +27,22 @@ def main():
                 file = open("misc_files/passwords.json", "w")
                 json.dump(passwords, file)
                 file.close()
+                print("\nUser successfully added\n")
             case "2" | "remove":
-                pass
-            case "3" | "change":
-                pass
-            case "4" | "exit":
+                file = open("misc_files/passwords.json", "r")
+                passwords = json.load(file)
+                file.close()
+                while username := input("\nRemoving a User:\nUsername:"):
+                    if username in passwords:
+                        del passwords[username]
+                        break
+                    else:
+                        print("User not found, please try again")
+                file = open("misc_files/passwords.json", "w")
+                json.dump(passwords, file)
+                file.close()
+                print("\nUser successfully removed\n")
+            case "3" | "exit":
                 quit()
             case _:
                 print("Input not recognized, please try again")
