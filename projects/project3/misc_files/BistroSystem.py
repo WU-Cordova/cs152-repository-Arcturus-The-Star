@@ -22,8 +22,10 @@ class BistroSystem:
         Starts the Bistro Ordering System
         :return:
         """
+        print("Welcome to the Bistro Order System")
+        # Log in
         while True:
-            print("Welcome to the Bearcat Bistro!\n\n1. Display Menu\n2. Take New Order\n3. View Open Orders\n4. Mark Next Order as Complete\n5. View End-of-Day Report\n6. Exit")
+            print("Dashboard:\n\n1. Display Menu\n2. Take New Order\n3. View Open Orders\n4. Mark Next Order as Complete\n5. View End-of-Day Report\n6. Exit")
             while inp := input(">"):
                 match inp.strip():
                     case "1":

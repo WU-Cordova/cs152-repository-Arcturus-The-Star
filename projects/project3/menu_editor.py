@@ -1,7 +1,10 @@
 import json
+from misc_files.password_authenticate import authenticate
 
 def main():
-    while i := input("Welcome to the Bistro Menu Editor\n1. Add a new item\n2. Remove an old item\n3. Exit\n>"):
+    authenticate()
+    print("Welcome to the Bistro Menu Editor")
+    while i := input("Dashboard:\n1. Add a new item\n2. Remove an old item\n3. Exit\n>"):
         match i.strip().lower():
             case "1" | "add":
                 menudict = json.load(menu := open("misc_files/menu.json", "r"))
