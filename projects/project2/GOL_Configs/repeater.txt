@@ -1,0 +1,6 @@
+ROWS:3
+COLS:5
+GRID:
+ooxoo
+ooxoo
+ooxoo
