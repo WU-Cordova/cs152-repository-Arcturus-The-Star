@@ -113,6 +113,10 @@ class BistroSystem:
         input("Press enter to return\n")
 
     def __mark_next_complete(self):
+        """
+        Marks the next order in the queue as completed and moves it to completed_orders
+        :return:
+        """
         while i := input(f"The next order is:\n{str(self.__open_orders.front())}\n1. Confirm completion\n2. Cancel and return\n>"):
             match i.strip().lower():
                 case "1" | "confirm":
