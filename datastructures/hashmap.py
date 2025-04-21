@@ -1,49 +1,79 @@
-import copy
-from typing import Callable, Iterator, Optional, Tuple
+from __future__ import annotations
+from typing import Callable, Iterator, Optional, Tuple, Hashable
 from datastructures.ihashmap import KT, VT, IHashMap
-from datastructures.array import Array
 import pickle
 import hashlib
 
 from datastructures.linkedlist import LinkedList
+from datastructures.array import Array
 
 class HashMap(IHashMap[KT, VT]):
 
     def __init__(self, number_of_buckets=7, load_factor=0.75, custom_hash_function: Optional[Callable[[KT], int]]=None) -> None:
-        raise NotImplementedError("HashMap.__init__() is not implemented yet.")
+        self.__capacity:int = number_of_buckets
+        self.__buckets:Array[LinkedList[tuple[KT, VT]]] = Array([LinkedList(data_type=tuple) for _ in range(self.__capacity)], data_type=LinkedList)
+        self.__load_factor:float = load_factor
+        self.__hash = HashMap._default_hash_function if not custom_hash_function else custom_hash_function
 
     def __getitem__(self, key: KT) -> VT:
-        raise NotImplementedError("HashMap.__getitem__() is not implemented yet.")
+        for tup in self.__buckets[self.__hash(key) % self.__capacity]:
+            if tup[0] == key:
+                return tup[1]
+        raise KeyError("Key not found")
 
-    def __setitem__(self, key: KT, value: VT) -> None:        
-        raise NotImplementedError("HashMap.__setitem__() is not implemented yet.")
+    def __setitem__(self, key: KT, value: VT) -> None:
+        if not isinstance(key, Hashable):
+           raise TypeError("Key must be hashable")
+        else:
+            bucket = self.__buckets[self.__hash(key) % self.__capacity]
+            for item in bucket:
+                if item[0] == key:
+                    bucket.remove(item)
+                    bucket.append((key, value))
+                    return
+            bucket.append((key, value))
 
     def keys(self) -> Iterator[KT]:
-        raise
+        return iter(self)
     
     def values(self) -> Iterator[VT]:
-        raise NotImplementedError("HashMap.values() is not implemented yet.")
+        return iter([j[1] for i in self.__buckets for j in i])
 
     def items(self) -> Iterator[Tuple[KT, VT]]:
-        raise NotImplementedError("HashMap.items() is not implemented yet.")
+        return iter([j for i in self.__buckets for j in i])
             
     def __delitem__(self, key: KT) -> None:
-        raise NotImplementedError("HashMap.__delitem__() is not implemented yet.")
+        bucket = self.__buckets[self.__hash(key) % self.__capacity]
+        for tup in bucket:
+            if tup[0] == key:
+                bucket.remove(tup)
+                return
+        raise KeyError("Key not present")
     
     def __contains__(self, key: KT) -> bool:
-        raise NotImplementedError("HashMap.__contains__() is not implemented yet.")
+        for tup in self.__buckets[self.__hash(key) % self.__capacity]:
+            if tup[0] == key:
+                return True
+        return False
     
     def __len__(self) -> int:
-        raise NotImplementedError("HashMap.__len__() is not implemented yet.")
+        return len([j for i in self.__buckets for j in i])
     
     def __iter__(self) -> Iterator[KT]:
-        raise NotImplementedError("HashMap.__iter__() is not implemented yet.")
+        return iter([j[0] for i in self.__buckets for j in i])
     
-    def __eq__(self, other: object) -> bool:
-        raise NotImplementedError("HashMap.__eq__() is not implemented yet.")
+    def __eq__(self, other: HashMap) -> bool:
+        if len(self) != len(other):
+            return False
+        else:
+            other_items = {i for i in other}
+            for i in self:
+                if i not in other_items:
+                    return False
+            return True
 
     def __str__(self) -> str:
-        return "{" + ", ".join(f"{key}: {value}" for key, value in self) + "}"
+        return "{" + ", ".join(f"{key}: {value}" for key, value in self.items()) + "}"
     
     def __repr__(self) -> str:
         return f"HashMap({str(self)})"

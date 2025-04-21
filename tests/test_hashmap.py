@@ -52,3 +52,8 @@ class TestHashMap:
         assert len(empty_hashmap) == 20
         for i in range(20):
             assert empty_hashmap[i] == str(i)
+
+    def test_eq(self, populated_hashmap, empty_hashmap):
+        assert populated_hashmap != empty_hashmap
+        assert populated_hashmap == populated_hashmap
+        assert empty_hashmap == empty_hashmap
