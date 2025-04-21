@@ -1,5 +1,8 @@
-import json
 from misc_files.password_authenticate import authenticate
+from datastructures.hashmap import HashMap
+from misc_files.Drink import Drink
+import pickle
+import json
 
 def main():
     authenticate()
@@ -7,12 +10,12 @@ def main():
     while i := input("Dashboard:\n1. Add a new item\n2. Remove an old item\n3. Exit\n>"):
         match i.strip().lower():
             case "1" | "add":
-                menudict = json.load(menu := open("misc_files/menu.json", "r"))
-                menu.close()
+                with open("misc_files/menu.bin", "rb") as menu:
+                    menumap:HashMap = pickle.loads(menu.read())
                 while True:
                     name = input("Enter the name of the new item\n>")
                     name = name.strip()
-                    if name in menudict or name == "cancel":
+                    if name in menumap or name == "cancel":
                         print("Name is already in use, please try again")
                     else:
                         break
@@ -24,11 +27,11 @@ def main():
                         print("Please input a valid price")
                 add_item(name, price)
             case "2" | "remove":
-                menudict = json.load(menu := open("misc_files/menu.json", "r"))
-                menu.close()
-                print(f"Menu:\n{"\n".join([i + ": " + str(menudict[i]) for i in menudict])}")
+                with open("misc_files/menu.bin", "rb") as file:
+                    menumap:HashMap = pickle.loads(file.read())
+                print(f"Menu:\n{"\n".join([str(menumap[i]) for i in menumap])}")
                 while name := input("Enter the name of the item to remove or cancel to leave\n>"):
-                    if name in menudict:
+                    if name in menumap:
                         remove_item(name)
                         break
                     if name == "cancel":
@@ -47,11 +50,11 @@ def add_item(name:str, price:float):
     :param price: The price of the item
     :return:
     """
-    menu = json.load(file := open("misc_files/menu.json", "r"))
-    file.close()
-    menu[name] = price
-    json.dump(menu, file := open("misc_files/menu.json", "w"), indent=6)
-    file.close()
+    with open("misc_files/menu.bin", "rb") as file:
+        menu = pickle.loads(file.read())
+    menu[name] = Drink(name, price)
+    with open("misc_files/menu.bin", "wb") as file:
+        file.write(pickle.dumps(menu))
 
 def remove_item(name:str):
     """
@@ -59,11 +62,11 @@ def remove_item(name:str):
     :param name: The name of the item
     :return:
     """
-    menu = json.load(file := open("misc_files/menu.json", "r"))
-    file.close()
+    with open("misc_files/menu.bin", "rb") as file:
+        menu = pickle.loads(file.read())
     del menu[name]
-    json.dump(menu, file := open("misc_files/menu.json", "w"), indent=6)
-    file.close()
+    with open("misc_files/menu.bin", "wb") as file:
+        file.write(pickle.dumps(menu))
 
 if __name__ == "__main__":
     main()

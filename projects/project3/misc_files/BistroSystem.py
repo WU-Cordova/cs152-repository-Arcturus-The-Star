@@ -1,20 +1,21 @@
 from .Drink import Drink
 from .OrderItem import OrderItem
 from .CustomerOrder import  CustomerOrder
-from datastructures import deque
-from datastructures import linkedlist
+from datastructures.deque import Deque
+from datastructures.linkedlist import LinkedList
+from datastructures.hashmap import HashMap
 from datetime import datetime
 import json
 import copy
+import pickle
 
 
 class BistroSystem:
     def __init__(self):
-        self.__open_orders:deque.Deque = deque.Deque(data_type=CustomerOrder)
-        self.__closed_orders:linkedlist.LinkedList = linkedlist.LinkedList(data_type=CustomerOrder)
-        menu_load = json.load(menu := open("misc_files/menu.json", "r"))
-        menu.close()
-        self.__menu:dict = {i: Drink(name=i, price=menu_load[i]) for i in menu_load} # item name:item price
+        self.__open_orders:Deque = Deque(data_type=CustomerOrder)
+        self.__closed_orders:LinkedList = LinkedList(data_type=CustomerOrder)
+        with open("misc_files/menu.bin", "rb") as file:
+            self.__menu:HashMap = pickle.loads(file.read())
         self.__report_viewed:bool = False
 
     def start(self):
@@ -23,7 +24,6 @@ class BistroSystem:
         :return:
         """
         print("Welcome to the Bistro Ordering System")
-        # Log in
         while True:
             print("Dashboard:\n\n1. Display Menu\n2. Take New Order\n3. View Open Orders\n4. Mark Next Order as Complete\n5. View End-of-Day Report\n6. Exit")
             while inp := input(">"):
@@ -63,7 +63,7 @@ class BistroSystem:
         """
         order = True
         while order:
-            current = CustomerOrder(linkedlist.LinkedList())
+            current = CustomerOrder(LinkedList())
             cont = True
             while cont :
                 item = input("Enter the name of the desired drink\n>")

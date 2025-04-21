@@ -3,7 +3,7 @@ from dataclasses import dataclass
 @dataclass
 class Drink:
     """
-    Stores a drink from menu.json
+    Stores a drink from menu.bin
     """
     name:str="Default"
     price:float=1

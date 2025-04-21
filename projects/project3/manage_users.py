@@ -1,9 +1,9 @@
-import json
+import pickle
 import os
 import pwinput
 import hashlib
-import base64
 from misc_files.password_authenticate import authenticate
+from datastructures.hashmap import HashMap
 
 def main():
     authenticate()
@@ -11,9 +11,8 @@ def main():
     while i := input("Dashboard:\n1. Add User\n2. Remove User\n3. Exit\n>"):
         match i.strip().lower():
             case "1" | "add":
-                file = open("misc_files/passwords.json", "r")
-                passwords = json.load(file)
-                file.close()
+                with open("misc_files/passwords.bin", "rb") as file:
+                    passwords:HashMap = pickle.loads(file.read())
                 while username := input("\nAdding New User:\nUsername:"):
                     if username in passwords:
                         print("Username already in use, please try again")
@@ -23,24 +22,21 @@ def main():
                 salt = os.urandom(16)
                 hash_fn = hashlib.sha256()
                 hash_fn.update(password + salt)
-                passwords[username] = [hash_fn.hexdigest(), base64.b64encode(salt).decode("utf-8")]
-                file = open("misc_files/passwords.json", "w")
-                json.dump(passwords, file)
-                file.close()
+                passwords[username] = (hash_fn.digest(), salt)
+                with open("misc_files/passwords.bin", "wb") as file:
+                    file.write(pickle.dumps(passwords))
                 print("\nUser successfully added\n")
             case "2" | "remove":
-                file = open("misc_files/passwords.json", "r")
-                passwords = json.load(file)
-                file.close()
+                with open("misc_files/passwords.bin", "rb") as file:
+                    passwords = pickle.loads(file.read())
                 while username := input("\nRemoving a User:\nUsername:"):
                     if username in passwords:
                         del passwords[username]
                         break
                     else:
                         print("User not found, please try again")
-                file = open("misc_files/passwords.json", "w")
-                json.dump(passwords, file)
-                file.close()
+                with open("misc_files/passwords.bin", "wb") as file:
+                    file.write(pickle.dumps(passwords))
                 print("\nUser successfully removed\n")
             case "3" | "exit":
                 quit()
