@@ -14,6 +14,7 @@ class HashMap(IHashMap[KT, VT]):
         self.__buckets:Array[LinkedList[tuple[KT, VT]]] = Array([LinkedList(data_type=tuple) for _ in range(self.__capacity)], data_type=LinkedList)
         self.__load_factor:float = load_factor
         self.__hash = HashMap._default_hash_function if not custom_hash_function else custom_hash_function
+        self.__length = 0
 
     def __getitem__(self, key: KT) -> VT:
         for tup in self.__buckets[self.__hash(key) % self.__capacity]:
@@ -25,6 +26,8 @@ class HashMap(IHashMap[KT, VT]):
         if not isinstance(key, Hashable):
            raise TypeError("Key must be hashable")
         else:
+            if self.__length > self.__capacity * self.__load_factor:
+                self.__resize()
             bucket = self.__buckets[self.__hash(key) % self.__capacity]
             for item in bucket:
                 if item[0] == key:
@@ -32,6 +35,7 @@ class HashMap(IHashMap[KT, VT]):
                     bucket.append((key, value))
                     return
             bucket.append((key, value))
+            self.__length += 1
 
     def keys(self) -> Iterator[KT]:
         return iter(self)
@@ -47,6 +51,7 @@ class HashMap(IHashMap[KT, VT]):
         for tup in bucket:
             if tup[0] == key:
                 bucket.remove(tup)
+                self.__length -= 1
                 return
         raise KeyError("Key not present")
     
@@ -57,7 +62,7 @@ class HashMap(IHashMap[KT, VT]):
         return False
     
     def __len__(self) -> int:
-        return len([j for i in self.__buckets for j in i])
+        return self.__length
     
     def __iter__(self) -> Iterator[KT]:
         return iter([j[0] for i in self.__buckets for j in i])
@@ -66,9 +71,8 @@ class HashMap(IHashMap[KT, VT]):
         if len(self) != len(other):
             return False
         else:
-            other_items = {i for i in other}
             for i in self:
-                if i not in other_items:
+                if i not in other:
                     return False
             return True
 
@@ -77,6 +81,23 @@ class HashMap(IHashMap[KT, VT]):
     
     def __repr__(self) -> str:
         return f"HashMap({str(self)})"
+
+    def __resize(self) ->None:
+        def isprime(n):
+            d = 3
+            while d * d <= n:
+                if n % d == 0:
+                    return False
+                d = d + 2
+            return True
+        new_size = self.__capacity * 2
+        while not isprime(new_size):
+            new_size += 1
+        new_buckets = Array([LinkedList() for _ in range(new_size)])
+        for k,v in self.items():
+            new_buckets[self.__hash(k) % new_size].append((k,v))
+        self.__capacity = new_size
+        self.__buckets = new_buckets
 
     @staticmethod
     def _default_hash_function(key: KT) -> int:
