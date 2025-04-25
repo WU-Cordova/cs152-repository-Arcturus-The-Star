@@ -1,0 +1,5 @@
+ROWS:5
+COLS:5
+xxo
+xxoo
+xx0
