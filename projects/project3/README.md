@@ -157,7 +157,7 @@ When program.py is run, it should bring up a login screen, and then a dashboard.
 >
 >\>5
 > 
->Report for 04-16-2025 14-23:
+>Report for 04-16-2025 at 14:23 :
 > 
 >Drink - Total Sold - Total Revenue
 > 
@@ -255,11 +255,11 @@ The menu editor, as the name implies, edits the menu.
 >\>3
 
 
-Drag report files (any .json file in the reports folder) onto 0_report_viewer.bat to view them.
+Drag report files (any .bin file in the reports folder) onto 0_report_viewer.bat to view them.
 
 ## Sample run:
 
->Report for 04-16-2025 at 14-23:
+>Report for 04-16-2025 at 14:23 :
 > 
 >Drink - Total Sold - Total Revenue
 >
@@ -333,11 +333,13 @@ The user management system does exactly what it says, use this to add or remove 
 
 
 # Datastructure Choices:
-* **Menu** - Dictionary: I used a dictionary for the menu because it is the easiest to translate to and from JSON files, and it made lookup easier. I did not use HashMap because it cannot be dumped into JSON. Dictionaries also have a lookup of O(1), versus the O(n) of an array, however it was mostly for the ease of being able to store the name of a menu item as a key and the Drink object as the value.
-* **CustomerOrder** - CustomerOrder is a dataclass that stores the OrderItems in a LinkedList. This is because I need it to be resizable and iterable, and lookup is not important. 
+* **Menu** - I used HashMap for the menu. This is for the ease of looking up data from its name rather than having to iterate through like I would have to if it was an Array. This leads to a roughly O(1) lookup rather than O(n). I don't see any downsides to this method.
+* **CustomerOrder** - CustomerOrder is a dataclass that stores the OrderItems in a LinkedList. This is because I need it to be resizable and iterable, and specific lookup is not important. 
 * **Order Confirmation** - I used the string method of CustomerOrder to translate the stored data (order array and name) into a properly formatted order summary. This is for ease of simply printing the order object to the screen without having to create anything or store and update a confirmation value. The only trade-off for this method is that it requires re-calculating the total price each time the order is printed, which has a complexity of O(n).
 * **Open Orders** - I used a Deque to store the open orders. This is not due to the double-endedness but simply because it is not restricted in size like a CircularQueue. A queue is useful because a FIFO system for retrieving orders is ideal, the first order should be completed before others. Using a LinkedList based queue has the tradeoff of making lookup very expensive, but luckily lookup is not required of a queue so this is not important.
 * **Completed Orders** - I used a LinkedList to store completed orders. This is because I would like to store them in a resizable data structure (as to not take up unnecessary space) and iterate over them when compiling an end of day report. LinkedList has these features, and is relatively lightweight, so it seems ideal for this scenario. LinkedList has the advantage over Array by not being dependent on an outside library, and avoids the complexity of resizing.
+* **End of Day Reports** - These are stored as HashMaps that have been pickled and stored in .bin files. HashMaps allow for convenient storage of names tied to values (number and total price) while being pickleable (though to be fair most things are).
+
 
 # Bugs / Limitations:
 
