@@ -157,7 +157,7 @@ class BistroSystem:
         Prints an end of day report
         :return:
         """
-        drink_totals = {i:[0,0] for i in self.__menu} # name of drink:[total number of drinks sold, total drink revenue]
+        drink_totals ={i:[0,0] for i in self.__menu} # name of drink:[total number of drinks sold, total drink revenue]
         date = datetime.today().strftime("%m-%d-%Y %H-%M")
         for order in self.__closed_orders:
             for item in order.order:
@@ -169,11 +169,10 @@ class BistroSystem:
         while i := input("1. Save to file\n2. Return without saving\n>"):
             match i.strip().lower():
                 case "1" | "save":
-                    with open(f"Reports/daily_report_{"_".join(date.split(" "))}.json", "x") as file:
-                        json.dump(drink_totals, file)
-                        file.close()
+                    with open(f"Reports/daily_report_{"_".join(date.split(" "))}.bin", "xb") as file:
+                        file.write(pickle.dumps(drink_totals))
                         self.__report_viewed = True
-                        return
+                    return
                 case "2" | "return":
                     self.__report_viewed = True
                     return
